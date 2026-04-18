@@ -12,3 +12,8 @@ while True:
 
     chat_history.append(dictionary)
 
+    ai_response = "I am a simulated Ai"
+    response = {"role": "assistant", "content": ai_response}
+    chat_history.append(response)
+
+    print(chat_history)
