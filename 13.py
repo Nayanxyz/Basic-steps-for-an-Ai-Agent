@@ -14,3 +14,10 @@ def safe_parse(json_string):
     except js.JSONDecodeError:
         print("Warning: AI generated invalid JSON.")
         return {"action": "error", "parameters": [0, 0]}
+
+parsed_data = safe_parse(broken_ai_string)
+
+nums = parsed_data["parameters"]
+
+
+print(multi(nums[0], nums[1]))
