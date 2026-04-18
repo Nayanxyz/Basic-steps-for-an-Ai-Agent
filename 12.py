@@ -8,3 +8,11 @@ def multi(a,b):
     multiplication = a * b
     return multiplication
 
+
+
+keys = parsed_data.keys()
+
+nums = parsed_data["parameters"]
+
+
+print(multi(nums[0], nums[1]))
