@@ -59,3 +59,18 @@ for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
+# ==========================================
+# 4. THE RAG INJECTION LOOP
+# ==========================================
+if user_input := st.chat_input("Ask about the company..."):
+    # A. Show User Message
+    with st.chat_message("user"):
+        st.write(user_input)
+
+    # B. Search Database
+    results = collection.query(query_texts=[user_input], n_results=1)
+    retrieved_text = results['documents'][0][0]
+
+    # C. Build RAG Prompt (But we hide this ugly text from the UI)
+    final_prompt = f"Answer using ONLY this context: {retrieved_text}. Question: {user_input}"
+
