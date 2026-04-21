@@ -28,3 +28,17 @@ def send_to_cloud_ai(history_list):
     return response.json()["choices"][0]["message"]["content"]
 
 
+# ==========================================
+# 2. THE CACHED DATABASE (Runs only ONCE)
+# ==========================================
+@st.cache_resource
+def setup_database():
+    client = chromadb.Client()
+    collection = client.create_collection(name="chroma_collection")
+    secret_doc = "The company wifi password is 'BlueMonkey42'."
+    collection.add(documents=[secret_doc], ids=["doc1"])
+    return collection
+
+
+collection = setup_database()
+
