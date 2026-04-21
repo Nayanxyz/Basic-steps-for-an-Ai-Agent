@@ -42,3 +42,20 @@ def setup_database():
 
 collection = setup_database()
 
+# ==========================================
+# 3. THE FRONTEND UI & MEMORY
+# ==========================================
+st.title("Enterprise RAG Agent")
+
+# Initialize Chat History
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = [
+        {"role": "system", "content": "You are a helpful AI assistant."}
+    ]
+
+# Draw existing messages (skipping the invisible system prompt)
+for message in st.session_state.chat_history:
+    if message["role"] != "system":
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
+
