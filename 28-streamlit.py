@@ -74,3 +74,15 @@ if user_input := st.chat_input("Ask about the company..."):
     # C. Build RAG Prompt (But we hide this ugly text from the UI)
     final_prompt = f"Answer using ONLY this context: {retrieved_text}. Question: {user_input}"
 
+    # D. Save to memory and send to AI
+    st.session_state.chat_history.append({"role": "user", "content": final_prompt})
+
+    with st.spinner("Agent is searching documents..."):
+        ai_response = send_to_cloud_ai(st.session_state.chat_history)
+
+    # E. Show AI Response
+    with st.chat_message("assistant"):
+        st.write(ai_response)
+
+    # F. Save AI response to memory
+    st.session_state.chat_history.append({"role": "assistant", "content": ai_response})
