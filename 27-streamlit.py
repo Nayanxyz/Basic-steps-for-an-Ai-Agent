@@ -16,3 +16,6 @@ if user_input := st.chat_input("Type your message..."):
     # A. Instantly draw the user's message on the screen
     with st.chat_message("user"):
         st.write(user_input)
+
+    # B. Save it to the memory vault so it survives the next rerun
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
