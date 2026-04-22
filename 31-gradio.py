@@ -78,5 +78,13 @@ Strict Rule: If the user asks about the weather, you MUST NOT reply with convers
             groq_history.append({"role": "user", "content": item[0]})
             groq_history.append({"role": "assistant", "content": item[1]})
 
+    # ==========================================
+    # STEP 3: SEARCH THE VECTOR DATABASE (RAG)
+    # ==========================================
+    # We take the exact words the user just typed and mathematically search our ChromaDB
+    # to see if we have any secret documents that relate to their question.
+    results = collection.query(query_texts=[message], n_results=1)
+    retrieved_text = results['documents'][0][0]
+
 
 
