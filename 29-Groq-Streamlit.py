@@ -121,3 +121,36 @@ if user_input := st.chat_input("Ask about the company or weather..."):
         # 5. THE REGEX INTERCEPTOR
         match = re.search(r'\{.*?\}', ai_words, re.DOTALL)
 
+        if match:
+            clean_json_string = match.group(0)
+            tool_data = js.loads(clean_json_string)
+            tool_name = tool_data.get("tool", "")
+
+            if tool_name == "get_weather":
+                city = tool_data.get("location", "an unknown city")
+                weather_result = fetch_weather(city)
+
+                # --- CHANGE 3: RULE OVERRIDE ---
+                # We give the AI permission to stop acting like a robot and speak normally.
+                temp_memory.append({"role": "assistant", "content": clean_json_string})
+                temp_memory.append({"role": "user",
+                                    "content": f"System Tool Output: {weather_result}. Read this data and answer the user directly. CRITICAL: Do NOT mention rules, overrides, tools, or JSON. Just answer the question naturally."})
+
+                ai_words = send_to_cloud_ai(temp_memory)
+
+            elif tool_name == "scrape_wikipedia":
+                search = tool_data.get("topic", "Search_term")
+                scrape = scrape_wikipedia(search)
+
+                temp_memory.append({"role": "assistant", "content": clean_json_string})
+                temp_memory.append({"role": "user",
+                                    "content": f"System Tool Output: {scrape}. Read this data and answer the user directly. CRITICAL: Do NOT mention rules, overrides, tools, or JSON. Just answer the question naturally."})
+
+                ai_words = send_to_cloud_ai(temp_memory)
+
+    # 6. DRAW THE FINAL AI RESPONSE TO THE SCREEN
+    with st.chat_message("assistant"):
+        st.write(ai_words)
+
+    # 7. Save final AI response to REAL memory
+    st.session_state.chat_history.append({"role": "assistant", "content": ai_words})
