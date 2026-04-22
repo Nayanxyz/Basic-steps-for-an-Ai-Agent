@@ -86,5 +86,18 @@ Strict Rule: If the user asks about the weather, you MUST NOT reply with convers
     results = collection.query(query_texts=[message], n_results=1)
     retrieved_text = results['documents'][0][0]
 
+    # ==========================================
+    # STEP 4: ASSEMBLE PROMPT & GET FIRST THOUGHT
+    # ==========================================
+    # We stitch the secret document and the user's question together.
+    # Notice we "soften" the prompt: we tell the AI to use the document IF it helps,
+    # but remind it to use its tool if the user is asking about the weather.
+    final_prompt = f"Here is some company context: '{retrieved_text}'. If it helps, use it. If the user asks for the weather, use your tool. Question: {message}"
+    groq_history.append({"role": "user", "content": final_prompt})
+
+    # We send the entire conversation history to the cloud to get the AI's first thought.
+    ai_words = send_to_local_ai(groq_history)
+
+
 
 
