@@ -60,5 +60,23 @@ Strict Rule: If the user asks about the weather, you MUST NOT reply with convers
 {"tool": "get_weather", "location": "City Name"}"""}
     ]
 
+    # ==========================================
+    # STEP 2: TRANSLATE THE MEMORY (DEFENSIVE PROGRAMMING)
+    # ==========================================
+    # Gradio frequently updates how they format 'history' (Lists vs Dictionaries vs Objects).
+    # This loop checks the exact data type Gradio gave us and safely translates it
+    # into the exact Dictionary format that the Groq API requires.
+    for item in history:
+        if isinstance(item, dict):
+            # Gradio is using the New Dictionary format
+            groq_history.append({"role": item["role"], "content": item["content"]})
+        elif hasattr(item, 'role'):
+            # Gradio is using the Newest Object format
+            groq_history.append({"role": item.role, "content": item.content})
+        else:
+            # Gradio is using the Old List format [user_msg, ai_msg]
+            groq_history.append({"role": "user", "content": item[0]})
+            groq_history.append({"role": "assistant", "content": item[1]})
+
 
 
