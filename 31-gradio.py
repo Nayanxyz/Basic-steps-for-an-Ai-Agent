@@ -120,6 +120,24 @@ Strict Rule: If the user asks about the weather, you MUST NOT reply with convers
                 # Actually run our Python function to get the real-world data
                 weather_result = fetch_weather(city)
 
+                # ==========================================
+                # STEP 6: THE FINAL SUMMARY
+                # ==========================================
+                # We append the weather data back into the memory, and ask the AI
+                # to read that data and summarize it naturally for the user.
+                groq_history.append({"role": "user",
+                                     "content": f"System Tool Output: {weather_result}. Now answer the user naturally."})
+
+                ai_final_words = send_to_local_ai(groq_history)
+                return ai_final_words  # Send the final English sentence to the Gradio UI
+
+            else:
+                return ai_words  # Failsafe: If regex fails to find brackets, just print what it said
+
+        except Exception as e:
+            # If the JSON was completely broken, we print an error so the developer can see it.
+            return f"System Error: The AI formatted the tool request incorrectly. Raw output: {ai_words}"
+
 
 
 
