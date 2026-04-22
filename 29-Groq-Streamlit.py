@@ -91,3 +91,33 @@ for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
+# ==========================================
+# 4. THE RAG INJECTION LOOP
+# ==========================================
+if user_input := st.chat_input("Ask about the company or weather..."):
+
+    # 1. THE VISIBLE COMMIT
+    with st.chat_message("user"):
+        st.write(user_input)
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
+
+    # 2. Search Database
+    results = collection.query(query_texts=[user_input], n_results=1)
+    retrieved_text = results['documents'][0][0]
+
+    # 3. THE SHADOW CLONE
+    temp_memory = st.session_state.chat_history.copy()
+
+    # --- CHANGE 2: AGGRESSIVE FINAL PROMPT ---
+    # We softened the "ONLY use this context" rule and reminded it to use the tool.
+    # --- FIX 1: Allow Wikipedia in the prompt ---
+    final_prompt = f"Company Context: '{retrieved_text}'. INSTRUCTION: If the user asks about weather, news, sports, or facts, you MUST use your tools. Do not say 'I don't know'. Question: {user_input}"
+    temp_memory[-1] = {"role": "user", "content": final_prompt}
+
+    # 4. Send the CLONE to the Brain
+    with st.spinner("Agent is thinking..."):
+        ai_words = send_to_cloud_ai(temp_memory)
+
+        # 5. THE REGEX INTERCEPTOR
+        match = re.search(r'\{.*?\}', ai_words, re.DOTALL)
+
