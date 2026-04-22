@@ -138,6 +138,21 @@ Strict Rule: If the user asks about the weather, you MUST NOT reply with convers
             # If the JSON was completely broken, we print an error so the developer can see it.
             return f"System Error: The AI formatted the tool request incorrectly. Raw output: {ai_words}"
 
+    # ==========================================
+    # STEP 7: NORMAL CONVERSATION
+    # ==========================================
+    else:
+        # If the AI didn't ask for a tool, it means it's just chatting or answering the RAG question.
+        # We simply pass its exact words back to the Gradio UI.
+        return ai_words
 
+# ==========================================
+# GLOBAL SCOPE (Only runs ONCE on server start)
+# ==========================================
+secret_doc = "The company wifi password is 'BlueMonkey42'."
+collection.add(documents=[secret_doc], ids=["doc1"])
+
+app = gr.ChatInterface(fn=chat_logic)
+app.launch(share=True)
 
 
