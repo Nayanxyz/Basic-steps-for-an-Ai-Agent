@@ -98,6 +98,28 @@ Strict Rule: If the user asks about the weather, you MUST NOT reply with convers
     # We send the entire conversation history to the cloud to get the AI's first thought.
     ai_words = send_to_local_ai(groq_history)
 
+    # ==========================================
+    # STEP 5: THE TOOL INTERCEPTOR (REGEX NET)
+    # ==========================================
+    # We check if the AI's response contains '{}' brackets and the word 'tool'.
+    # If it does, we assume it is trying to run a Python function, NOT talk to the user.
+    if "{" in ai_words and "}" in ai_words and "tool" in ai_words.lower():
+        try:
+            import re
+            # REGEX MAGIC: Llama 3 often wraps JSON in markdown (```json ... ```).
+            # This regex rips away everything except the pure dictionary inside { }.
+            match = re.search(r'\{.*?\}', ai_words, re.DOTALL)
+
+            if match:
+                clean_json_string = match.group(0)
+                tool_data = js.loads(clean_json_string)  # Convert string to Python Dictionary
+
+                # Extract the city, or default to 'an unknown city' if the AI forgot to include it.
+                city = tool_data.get("location", "an unknown city")
+
+                # Actually run our Python function to get the real-world data
+                weather_result = fetch_weather(city)
+
 
 
 
