@@ -74,4 +74,30 @@ def scrape_wikipedia(topic):
     return massive_string[:2000]
 
 
+def chat_logic(message, history):
+    groq_history = [
+        {"role": "system", "content": """You are an advanced AI assistant. You have access to TWO tools:
+1. get_weather: Fetches the current weather for a city.
+   JSON Format: {"tool": "get_weather", "location": "City Name"}
+2. scrape_wikipedia: Searches Wikipedia for facts, history, or news.
+   JSON Format: {"tool": "scrape_wikipedia", "topic": "Search_Term_With_Underscores"}
+
+STRICT RULE: If you need to use a tool, you MUST output ONLY the JSON object. 
+NEVER apologize. NEVER mention your knowledge cutoff. If you don't know the answer, use the scrape_wikipedia tool immediately."""}
+
+     ]
+
+    for item in history:
+        if isinstance(item, dict):
+            # Gradio is using the New Dictionary format
+            groq_history.append({"role": item["role"], "content": item["content"]})
+        elif hasattr(item, 'role'):
+            # Gradio is using the Newest Object format
+            groq_history.append({"role": item.role, "content": item.content})
+        else:
+            # Gradio is using the Old List format [user_msg, ai_msg]
+            groq_history.append({"role": "user", "content": item[0]})
+            groq_history.append({"role": "assistant", "content": item[1]})
+
+
 
