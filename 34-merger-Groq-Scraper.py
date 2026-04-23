@@ -122,3 +122,23 @@ NEVER apologize. NEVER mention your knowledge cutoff. If you don't know the answ
             # This regex rips away everything except the pure dictionary inside { }.
             match = re.search(r'\{.*?\}', ai_words, re.DOTALL)
 
+            if match:
+                clean_json_string = match.group(0)
+                tool_data = js.loads(clean_json_string)
+                tool_name = tool_data.get("tool", "")
+
+                if tool_name == "get_weather":
+                    # Extract the city, or default to 'an unknown city' if the AI forgot to include it.
+                    city = tool_data.get("location", "an unknown city")
+
+                    # Actually run our Python function to get the real-world data
+                    weather_result = fetch_weather(city)
+
+                    groq_history.append({"role": "user",
+                                         "content": f"System Tool Output: {weather_result}."
+                                                    f" RULE OVERRIDE: You have the data. Do NOT output JSON. Answer the user naturally in plain, friendly text."})
+
+                    ai_final_words = send_to_local_ai(groq_history)
+                    return ai_final_words  # Send the final English sentence to the Gradio UI
+
+
