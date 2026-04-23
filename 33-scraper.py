@@ -15,5 +15,13 @@ article = response.text
 
 soup = BeautifulSoup(article, 'html.parser')
 
+# print(soup.title.text)
 
+content = soup.find_all('p')
+
+massive_string = ""
+for paragraph in content:
+    massive_string += paragraph.get_text() +"\n"
+
+print(massive_string[:500]) # Prints just the first 500 characters
 
