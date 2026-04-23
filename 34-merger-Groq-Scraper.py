@@ -100,4 +100,25 @@ NEVER apologize. NEVER mention your knowledge cutoff. If you don't know the answ
             groq_history.append({"role": "assistant", "content": item[1]})
 
 
+    results = collection.query(query_texts=[message], n_results=1)
+    retrieved_text = results['documents'][0][0]
+
+
+    final_prompt = f"Company Context: '{retrieved_text}'. INSTRUCTION: If the user asks about sports, news, or 2024, you MUST use the scrape_wikipedia tool. Do not say 'I don't know'. Question: {message}"
+    groq_history.append({"role": "user", "content": final_prompt})
+
+    # We send the entire conversation history to the cloud to get the AI's first thought.
+    ai_words = send_to_local_ai(groq_history)
+
+    # ==========================================
+    # STEP 5: THE TOOL INTERCEPTOR (REGEX NET)
+    # ==========================================
+    # We check if the AI's response contains '{}' brackets and the word 'tool'.
+    # If it does, we assume it is trying to run a Python function, NOT talk to the user.
+    if "{" in ai_words and "}" in ai_words and "tool" in ai_words.lower():
+        try:
+            import re
+            # REGEX MAGIC: Llama 3 often wraps JSON in markdown (```json ... ```).
+            # This regex rips away everything except the pure dictionary inside { }.
+            match = re.search(r'\{.*?\}', ai_words, re.DOTALL)
 
