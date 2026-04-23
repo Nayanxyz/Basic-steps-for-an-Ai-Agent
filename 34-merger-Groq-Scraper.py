@@ -141,4 +141,14 @@ NEVER apologize. NEVER mention your knowledge cutoff. If you don't know the answ
                     ai_final_words = send_to_local_ai(groq_history)
                     return ai_final_words  # Send the final English sentence to the Gradio UI
 
+                elif tool_name == "scrape_wikipedia":
+                    search = tool_data.get("topic","Search_term" )
+                    scrape = scrape_wikipedia(search)
+
+                    groq_history.append({"role": "user", "content": f"System Tool Output: {scrape}."
+                                                                    f" RULE OVERRIDE: You have the data. Do NOT output JSON. Answer the user naturally in a plain, friendly paragraph."})
+
+                    ai_final_words = send_to_local_ai(groq_history)
+                    return ai_final_words
+
 
