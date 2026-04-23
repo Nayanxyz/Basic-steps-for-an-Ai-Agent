@@ -151,4 +151,23 @@ NEVER apologize. NEVER mention your knowledge cutoff. If you don't know the answ
                     ai_final_words = send_to_local_ai(groq_history)
                     return ai_final_words
 
+                else:
+                    return f"System Error: Unknown tool requested -> {tool_name}"
 
+            else:
+                return ai_words  # Failsafe: If regex fails to find brackets, just print what it said
+
+        except Exception as e:
+            # If the JSON was completely broken, we print an error so the developer can see it.
+            return f"System Error: The AI formatted the tool request incorrectly. Raw output: {ai_words}"
+
+    else:
+
+        return ai_words
+
+
+secret_doc = "The company wifi password is 'BlueMonkey42'."
+collection.add(documents=[secret_doc], ids=["doc1"])
+
+app = gr.ChatInterface(fn=chat_logic)
+app.launch(share=True)
