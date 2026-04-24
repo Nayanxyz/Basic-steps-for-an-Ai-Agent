@@ -34,5 +34,6 @@ def compress_memory(history_list):
     data = send_to_cloud_ai(compression_payload)
     return data
 
-
+compressed = compress_memory(long_history)
+print(compressed)
 
