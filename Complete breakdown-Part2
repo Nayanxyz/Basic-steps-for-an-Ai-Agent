@@ -1,0 +1,45 @@
+Phase 6: Live Internet Access (Web Scraping)
+    What we did:
+
+        We built a digital web browser for our AI.
+
+        We gave the AI the ability to bypass website security and read Wikipedia.
+
+        We extracted pure English text from the website to feed back into the AI's brain.
+
+    How we did it:
+
+        We updated our System Prompt to give the AI two JSON tools to choose from (get_weather and scrape_wikipedia).
+
+        We wrote Python code to clean up the user's search words (replacing spaces with underscores)
+        so the web links wouldn't break.
+
+        We used a "Rule Override" prompt to tell the AI to stop acting like a JSON robot
+        and speak normally once it found the data.
+
+    The Purpose:
+
+        To fix the AI's "Knowledge Cutoff" (an AI normally doesn't know anything about recent events).
+
+        To make the AI fully autonomous so it realizes when it doesn't know an answer and
+        proactively searches the live internet itself.
+
+    Tools Used: requests library, BeautifulSoup, and Python String Slicing.
+
+    Tool Usages & Examples:
+
+        requests.get(url, headers): This is how our code knocks on a website's door to ask for data.
+
+            Hard Concept Example: Websites use security bots to block automated code. We used "headers" as a
+                                  fake ID badge. It tricked Wikipedia into thinking we were a human using Google Chrome.
+
+        BeautifulSoup: A library that cleans up messy web code.
+
+            Hard Concept Example: A raw website is full of ugly code, buttons, and ads. BeautifulSoup acts like a strainer,
+                                  filtering out the junk so we only keep the <p> (paragraph) tags containing the real article.
+
+        massive_string[:2000] (String Slicing): A way to chop up text.
+
+            Hard Concept Example: An AI has a maximum reading limit (Context Window). If we force it to read a 10,000-word
+                                  Wikipedia page, it will crash. We slice the text to only send the first 2,000 characters.
+
