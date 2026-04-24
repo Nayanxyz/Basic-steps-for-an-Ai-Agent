@@ -46,3 +46,6 @@ print(compressed)
 # 1. Grab the Top Bun (The System Rules)
 top_bun = long_history[0]
 
+# 2. Grab the Bottom Bun (The Newest Question)
+bottom_bun = long_history[-1]
+
