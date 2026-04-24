@@ -52,3 +52,10 @@ bottom_bun = long_history[-1]
 # 3. Create the New Meat (The Summary wrapped in a system dictionary)
 summary_meat = {"role": "system", "content": f"Previous Conversation Summary:\n{compressed}"}
 
+# 4. Build the New Spliced Memory List!
+spliced_history = [top_bun, summary_meat, bottom_bun]
+
+# Print it out to see the magic
+import pprint
+print("\n--- THE NEW SPLICED MEMORY ---")
+pprint.pprint(spliced_history)
