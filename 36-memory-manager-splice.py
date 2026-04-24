@@ -49,3 +49,6 @@ top_bun = long_history[0]
 # 2. Grab the Bottom Bun (The Newest Question)
 bottom_bun = long_history[-1]
 
+# 3. Create the New Meat (The Summary wrapped in a system dictionary)
+summary_meat = {"role": "system", "content": f"Previous Conversation Summary:\n{compressed}"}
+
