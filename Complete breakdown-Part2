@@ -91,3 +91,25 @@ Phase 7: Streamlit Porting & Shadow Memory Architecture
                                   Regex is like a search-and-rescue dog. It sniffs through thousands of words,
                                   ignoring regular English, to dig up the exact {JSON} command we need.
 
+The Framework Comparison
+    Because we built this exact same AI agent in two different visual frameworks, here is how we compare them:
+
+    Gradio (The Quick Prototyper):
+
+        How it works: It acts like an automatic loop. We write one single function, and Gradio handles all the UI work for us.
+
+        The Good: It is incredibly fast and easy to set up. It automatically manages memory for us.
+
+        The Bad: It is very hard to make it look like a highly customized, professional website.
+                 It also stores memory in a strange format, forcing us to write extra code to translate it so the AI can understand it.
+
+    Streamlit (The Production Engine):
+
+        How it works: It redraws the entire website from top to bottom every single time the user interacts with it.
+
+        The Good: It looks amazing out of the box. We can easily add sidebars, loading spinners, and custom colors.
+                  Because we build the memory manually, we can format it perfectly for the AI without needing any translation code.
+
+        The Bad: Because it constantly redraws the screen, any messy backend logic will accidentally show up on the user's screen.
+                 It requires us to build advanced architectures (like Shadow Memory) to keep it running smoothly.
+
