@@ -113,3 +113,32 @@ The Framework Comparison
         The Bad: Because it constantly redraws the screen, any messy backend logic will accidentally show up on the user's screen.
                  It requires us to build advanced architectures (like Shadow Memory) to keep it running smoothly.
 
+The Master Pipeline (Connecting Everything)
+
+    Here is the grand, final picture of how data flows through the entire enterprise system we built.
+    This connects our UI, our databases, the internet, and the AI into one massive pipeline:
+
+    System Start: Our Streamlit app turns on. It wakes up our Vector Database (ChromaDB) and loads
+                  our strict AI rules (JSON schemas and anti-apology rules) into the "Save Game" memory.
+
+    User Input: The user types a question (e.g., "Who won the Super Bowl in 2024?"). We save this clean
+                text and draw it beautifully on the screen.
+
+    The Shadow Clone (Phase 7): We make a photocopy (temp_memory) of the conversation so we don't mess up the clean screen.
+
+    RAG Database Search (Phase 5): We secretly convert the user's question into math, search our private
+                                   company database for matching documents, and inject those facts into our photocopy.
+
+    The Brain Link (Phase 3): We send the messy photocopy across the internet to the Groq AI Brain.
+
+    The Interceptor (Phase 4): The AI reads the photocopy, realizes it doesn't know about 2024, and outputs a JSON command
+                               asking to use Wikipedia. Our Regex "search dog" catches the command before the user can see it.
+
+    Web Scraping (Phase 6): Our Python script acts like a human browser. It sneaks past Wikipedia's security,
+                            finds the Super Bowl page, filters out the ads, and grabs the pure text.
+
+    The Rule Override: We inject the Wikipedia text into our photocopy, along with a firm instruction to the AI:
+                       "Read this fact, answer naturally, and do not talk about your rules."
+
+    The Final Output: The AI reads the live Wikipedia data and generates a perfect English sentence ("The Kansas City Chiefs won").
+                      We pull this clean sentence out of the photocopy, save it to the real memory, and display it on the user's screen.
