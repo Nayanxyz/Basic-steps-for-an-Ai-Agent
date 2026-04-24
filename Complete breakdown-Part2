@@ -43,3 +43,51 @@ Phase 6: Live Internet Access (Web Scraping)
             Hard Concept Example: An AI has a maximum reading limit (Context Window). If we force it to read a 10,000-word
                                   Wikipedia page, it will crash. We slice the text to only send the first 2,000 characters.
 
+Phase 7: Streamlit Porting & Shadow Memory Architecture
+
+    What we did:
+
+        We moved our entire project from Gradio to Streamlit to make it look like a professional enterprise app.
+
+        We invented a "Shadow Memory" system.
+
+        We successfully hid our messy backend code (like database prompts and JSON tool commands) from the user's screen.
+
+    How we did it:
+
+        We split our memory into two levels. We kept the main memory completely clean
+        (only showing what the user typed and what the AI finally answered).
+
+        We created a hidden, temporary copy of the memory (temp_memory) for the AI to use as scratchpad.
+
+        We injected our messy database documents and tool commands into the hidden copy,
+        let the AI do its thinking there, and only sent the final, clean answer to the main screen.
+
+    The Purpose:
+
+        To prevent "UI Pollution" (where ugly backend code accidentally leaks onto the screen).
+
+        To completely separate "What the User Sees" from "What the AI Thinks."
+
+    Tools Used: Streamlit Session State, Python List Copying (.copy()), and Regular Expressions (re).
+
+    Tool Usages & Examples:
+
+        st.session_state: Streamlit's native memory storage.
+
+            Hard Concept Example: Streamlit is unique because every time you press a button, it restarts your entire
+                                  Python file. st.session_state is like a "Save Game" file. It protects our chat history
+                                  from being deleted every time the screen refreshes.
+
+        my_list.copy(): A tool to duplicate data.
+
+            Hard Concept Example: In Python, if you modify a list, it permanently changes the original file.
+                                  Using .copy() is like making a photocopy. We can scribble our messy code all over
+                                  the photocopy (temp_memory) without ruining the original, clean document (st.session_state).
+
+        Regular Expressions (re.search): A highly advanced text-matching tool.
+
+            Hard Concept Example: Sometimes the AI buries its tool request inside a massive paragraph.
+                                  Regex is like a search-and-rescue dog. It sniffs through thousands of words,
+                                  ignoring regular English, to dig up the exact {JSON} command we need.
+
