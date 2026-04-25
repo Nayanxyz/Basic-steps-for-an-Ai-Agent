@@ -42,3 +42,12 @@ while True:
     # Let's print exactly what the AI decided so we can see its brain working
     print(f"DEBUG: Supervisor decided -> {ai_decision}")
 
+    # 3. The Routing Logic
+    if "WEB" in ai_decision.upper():
+        print("[ROUTING TO RESEARCH DEPARTMENT...]")
+    elif "RAG" in ai_decision.upper():
+        print("[ROUTING TO INTERNAL DATABASE...]")
+    elif "CHAT" in ai_decision.upper():
+        print("[ROUTING TO CUSTOMER SERVICE...]")
+    else:
+        print(f"[ERROR] The AI got confused and outputted: {ai_decision}")
