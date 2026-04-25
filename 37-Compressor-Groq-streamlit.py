@@ -77,3 +77,27 @@ def setup_database():
 
 collection = setup_database()
 
+# ==========================================
+# 3. THE FRONTEND UI & MEMORY
+# ==========================================
+st.title("Enterprise RAG Agent")
+
+# --- CHANGE 1: AGGRESSIVE SYSTEM PROMPT ---
+# We explicitly forbid the AI from saying "I don't know" and demand the JSON tool.
+if "chat_history" not in st.session_state:
+    st.session_state.chat_history = [
+        {"role": "system", "content": """You are an advanced AI assistant. You have access to TWO tools:
+1. get_weather: Fetches the current weather for a city.
+   JSON Format: {"tool": "get_weather", "location": "City Name"}
+2. scrape_wikipedia: Searches Wikipedia for facts, history, or news.
+   JSON Format: {"tool": "scrape_wikipedia", "topic": "Search_Term_With_Underscores"}
+
+STRICT RULE: If you need to use a tool, you MUST output ONLY the JSON object. 
+NEVER apologize. NEVER mention your knowledge cutoff. If you don't know the answer, use the scrape_wikipedia tool immediately."""}
+    ]
+
+for message in st.session_state.chat_history:
+    if message["role"] != "system":
+        with st.chat_message(message["role"]):
+            st.write(message["content"])
+
