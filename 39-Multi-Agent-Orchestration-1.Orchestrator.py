@@ -29,3 +29,16 @@ User: "Hello there!" -> CHAT
 User: "Who won the game?" -> WEB"""}
 ]
 
+while True:
+    user_input = input("\nYou: ")
+
+    # 1. Build the payload (Rules + The User's Question)
+    routing_payload = system_prompt.copy()
+    routing_payload.append({"role": "user", "content": user_input})
+
+    # 2. Send it to the AI and SAVE the answer
+    ai_decision = send_to_cloud_ai(routing_payload)
+
+    # Let's print exactly what the AI decided so we can see its brain working
+    print(f"DEBUG: Supervisor decided -> {ai_decision}")
+
