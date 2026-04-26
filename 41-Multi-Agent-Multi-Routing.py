@@ -188,3 +188,16 @@ if user_input := st.chat_input("Ask about the company, weather, math, or news...
             except Exception as e:
                 pass  # If math fails, we just ignore it and let the AI try its best
 
+        # --- FINAL SYNTHESIS ---
+        # If we collected any data from the 3 departments above:
+        if collected_context != "":
+            final_prompt = f"System Data Provided:\n{collected_context}\nRead the data above and answer the user's prompt naturally. Prompt: {user_input}"
+            temp_memory[-1] = {"role": "user", "content": final_prompt}
+
+        # Send to Cloud! (If collected_context is empty, it just acts like CHAT)
+        ai_words = send_to_cloud_ai(temp_memory)
+
+    # 4. FINAL COMMIT
+    with st.chat_message("assistant"):
+        st.write(ai_words)
+    st.session_state.chat_history.append({"role": "assistant", "content": ai_words})
