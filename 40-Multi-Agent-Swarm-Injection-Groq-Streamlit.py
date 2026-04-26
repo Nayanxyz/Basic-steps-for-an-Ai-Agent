@@ -143,3 +143,43 @@ if user_input := st.chat_input("Ask about the company, weather, or news..."):
         decision = get_manager_decision(user_input)
         st.write(f"*(System Log: Routed to {decision} Department)*")  # Visual feedback for you
 
+    # 3. THE WORKER AGENTS EXECUTE
+    temp_memory = st.session_state.chat_history.copy()
+
+    with st.spinner("Agent is working..."):
+
+        # --- THE RAG DEPARTMENT ---
+        if "RAG" in decision:
+            results = collection.query(query_texts=[user_input], n_results=1)
+            retrieved_text = results['documents'][0][0]
+            final_prompt = f"Company Context: '{retrieved_text}'. Answer the user using ONLY this context. Question: {user_input}"
+            temp_memory[-1] = {"role": "user", "content": final_prompt}
+            ai_words = send_to_cloud_ai(temp_memory)
+
+        # --- THE WEB DEPARTMENT ---
+        elif "WEB" in decision:
+            # We skip the AI trying to pick a tool, we just force it to search!
+            scrape_data = scrape_wikipedia(user_input)
+            final_prompt = f"Live Web Data: '{scrape_data}'. Read this data and answer the user naturally. Do not mention your tools. Question: {user_input}"
+            temp_memory[-1] = {"role": "user", "content": final_prompt}
+            ai_words = send_to_cloud_ai(temp_memory)
+
+        # --- THE MATH DEPARTMENT ---
+        elif "MATH" in decision:
+            # 1. Clean the input: Keep ONLY numbers and math symbols (0-9, +, -, *, /, .)
+            # This turns "What is 452 * 18?" into "452*18"
+            # Translation: {re.sub} "Look at the user's input. If you see a character that is NOT a number, and NOT a math symbol,
+            # and NOT a parenthesis, and NOT a decimal point... replace it with an empty string (delete it)."
+            math_expression = re.sub(r'[^0-9\+\-\*\/\(\)\.]', '', user_input)
+            try:
+                # 2. Python does the actual math perfectly
+                correct_answer = calculate_math(math_expression)
+                # 3. Give the AI the final answer so it doesn't have to guess
+                final_prompt = f"System Math Output: '{correct_answer}'. The user asked a math question. Tell them this exact answer naturally. Question: {user_input}"
+
+            except Exception as e:
+                # Fallback just in case the math was formatted weirdly
+                final_prompt = f"The user asked a math question. Answer it to the best of your ability. Question: {user_input}"
+
+            temp_memory[-1] = {"role": "user", "content": final_prompt}
+            ai_words = send_to_cloud_ai(temp_memory)
