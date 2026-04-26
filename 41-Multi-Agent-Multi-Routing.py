@@ -57,3 +57,48 @@ Example: 'Hello, who is the CEO of Apple?' -> 'CEO of Apple'"""},
     response = requests.post(CLOUD_URL, headers=headers, json=payload)
     return response.json()["choices"][0]["message"]["content"].strip()
 
+def send_to_cloud_ai(history_list):
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "llama-3.1-8b-instant", "messages": history_list, "temperature": 0.7}
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)
+    return response.json()["choices"][0]["message"]["content"]
+
+def compress_memory(history_list):
+    compression_payload = [
+        {"role": "system", "content": "You are a backend memory manager. Read the conversation log and generate a detailed 'Running Fact Sheet'. You MUST retain all specific facts, user names, locations, and past actions. Do not leave out any details."},
+        {"role": "user", "content": f"Here is the raw conversation log: {str(history_list)}"}
+    ]
+    return send_to_cloud_ai(compression_payload)
+
+def calculate_math(expression):
+    # Evaluates a string like "452*18" and returns the integer/float
+    return eval(str(expression))
+
+
+def scrape_wikipedia(topic):
+    # 1. SANITIZE THE DATA: Replace all spaces with underscores
+    clean_topic = topic.replace(" ", "_")
+
+    # 2. DEBUGGER: Print it to the terminal so we can watch it work
+    print(f"\n--- SCRAPER TRIGGERED: Searching for '{clean_topic}' ---\n")
+
+    url = f"https://en.wikipedia.org/wiki/{clean_topic}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
+
+    # 2. Pass the headers into the get request
+    response = requests.get(url, headers=headers)
+
+    article = response.text
+
+    soup = BeautifulSoup(article, 'html.parser')
+
+    content = soup.find_all('p')
+
+    massive_string = ""
+    for paragraph in content:
+        massive_string += paragraph.get_text() + "\n"
+
+    return massive_string[:2000]
+
