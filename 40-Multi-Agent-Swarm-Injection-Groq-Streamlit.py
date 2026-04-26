@@ -87,3 +87,18 @@ def scrape_wikipedia(topic):
         massive_string += paragraph.get_text() + "\n"
 
     return massive_string[:2000]
+
+# ==========================================
+# 2. THE CACHED DATABASE
+# ==========================================
+@st.cache_resource
+def setup_database():
+    client = chromadb.Client()
+    collection = client.create_collection(name="chroma_collection")
+    secret_doc = "The company wifi password is 'BlueMonkey42'."
+    collection.add(documents=[secret_doc], ids=["doc1"])
+    return collection
+
+
+collection = setup_database()
+
