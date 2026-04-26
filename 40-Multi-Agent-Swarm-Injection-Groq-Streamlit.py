@@ -183,3 +183,13 @@ if user_input := st.chat_input("Ask about the company, weather, or news..."):
 
             temp_memory[-1] = {"role": "user", "content": final_prompt}
             ai_words = send_to_cloud_ai(temp_memory)
+
+        # --- THE CHAT DEPARTMENT ---
+        else:
+            # Normal conversation, no injections needed
+            ai_words = send_to_cloud_ai(temp_memory)
+
+    # 4. FINAL COMMIT
+    with st.chat_message("assistant"):
+        st.write(ai_words)
+    st.session_state.chat_history.append({"role": "assistant", "content": ai_words})
