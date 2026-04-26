@@ -160,3 +160,31 @@ if user_input := st.chat_input("Ask about the company, weather, math, or news...
     temp_memory = st.session_state.chat_history.copy()
     collected_context = ""  # Start with an empty string
 
+    with st.spinner("Agents are working..."):
+
+        # --- THE RAG DEPARTMENT ---
+        if "RAG" in decision:
+            results = collection.query(query_texts=[user_input], n_results=1)
+            retrieved_text = results['documents'][0][0]
+            collected_context += f"[Internal Company Data: {retrieved_text}]\n"
+
+        # --- THE WEB DEPARTMENT ---
+        if "WEB" in decision:
+            # 1. Ask the Micro-Agent to find the true topic
+            wiki_topic = get_wiki_topic(user_input)
+
+            # 2. Scrape using ONLY the clean topic
+            scrape_data = scrape_wikipedia(wiki_topic)
+
+            # 3. Add it to the desk
+            collected_context += f"[Live Web Data for '{wiki_topic}': {scrape_data}]\n"
+
+        # --- THE MATH DEPARTMENT ---
+        if "MATH" in decision:
+            math_expression = re.sub(r'[^0-9\+\-\*\/\(\)\.]', '', user_input)
+            try:
+                correct_answer = calculate_math(math_expression)
+                collected_context += f"[System Math Calculation: {correct_answer}]\n"
+            except Exception as e:
+                pass  # If math fails, we just ignore it and let the AI try its best
+
