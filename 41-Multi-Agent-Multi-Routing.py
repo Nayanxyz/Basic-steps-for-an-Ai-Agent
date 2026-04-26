@@ -134,3 +134,29 @@ for message in st.session_state.chat_history:
         with st.chat_message(message["role"]):
             st.write(message["content"])
 
+# ==========================================
+# 4. THE SWARM ORCHESTRATION LOOP
+# ==========================================
+if user_input := st.chat_input("Ask about the company, weather, math, or news..."):
+
+    # 1. The Visible Commit & Background Janitor
+    with st.chat_message("user"):
+        st.write(user_input)
+    st.session_state.chat_history.append({"role": "user", "content": user_input})
+
+    if len(st.session_state.chat_history) > 6:
+        history_to_compress = st.session_state.chat_history[:-1]
+        compressed_text = compress_memory(history_to_compress)
+        st.session_state.chat_history = [st.session_state.chat_history[0],
+                                         {"role": "system", "content": f"Fact Sheet:\n{compressed_text}"},
+                                         st.session_state.chat_history[-1]]
+
+    # 2. THE MANAGER DECIDES
+    with st.spinner("Manager is routing your request..."):
+        decision = get_manager_decision(user_input)
+        st.write(f"*(System Log: Routed to {decision})*")
+
+    # 3. THE WORKER AGENTS EXECUTE (The Pipeline)
+    temp_memory = st.session_state.chat_history.copy()
+    collected_context = ""  # Start with an empty string
+
