@@ -82,3 +82,29 @@ def send_to_cloud_ai(history_list):
     return response.json()["choices"][0]["message"]["content"]
 
 
+def compress_memory(history_list):
+    compression_payload = [
+        {"role": "system",
+         "content": "You are a backend memory manager. Generate a detailed 'Running Fact Sheet' from the log."},
+        {"role": "user", "content": str(history_list)}
+    ]
+    return send_to_cloud_ai(compression_payload)
+
+
+def calculate_math(expression):
+    return eval(str(expression))
+
+
+def scrape_wikipedia(topic):
+    clean_topic = topic.replace(" ", "_")
+    print(f"\n[SERVER LOG] Scraping Wikipedia for: '{clean_topic}'")
+    url = f"https://en.wikipedia.org/wiki/{clean_topic}"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    massive_string = ""
+    for paragraph in soup.find_all('p'):
+        massive_string += paragraph.get_text() + "\n"
+    return massive_string[:2000]
+
+
