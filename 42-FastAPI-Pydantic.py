@@ -23,3 +23,15 @@ async def chat_with_swarm(request: UserRequest):
     # --- DEBUGGER: Print what the server received ---
     print(f"\n[SERVER LOG] Received prompt from {request.user_id}: '{request.prompt}'")
 
+    # (In the next step, we will paste your Python Swarm Pipeline here)
+    # For now, we will just mock the AI to make sure the network is working.
+
+    mock_routing = "WEB, MATH"
+    mock_answer = f"Hello {request.user_id}, you asked: '{request.prompt}'. I am a headless server!"
+
+    # 4. Return the data exactly as the contract demands
+    return SwarmResponse(
+        manager_routing=mock_routing,
+        final_answer=mock_answer
+    )
+
