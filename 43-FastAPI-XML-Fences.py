@@ -135,3 +135,29 @@ async def chat_with_swarm(request: UserRequest):
                                             user_history[-1]]
         user_history = active_sessions[request.user_id]
 
+    # 3. Manager Routing
+    decision = get_manager_decision(request.prompt)
+    print(f"[SERVER LOG] Manager routed to: {decision}")
+
+    # 4. The Pipeline
+    temp_memory = user_history.copy()
+    collected_context = ""
+
+    if "RAG" in decision:
+        results = collection.query(query_texts=[request.prompt], n_results=1)
+        # Wrap data in clear XML tags
+        collected_context += f"<internal_company_data>\n{results['documents'][0][0]}\n</internal_company_data>\n\n"
+
+    if "WEB" in decision:
+        wiki_topic = get_wiki_topic(request.prompt)
+        if wiki_topic != "NONE":
+            scrape_data = scrape_wikipedia(wiki_topic)
+            collected_context += f"<wikipedia_data topic='{wiki_topic}'>\n{scrape_data}\n</wikipedia_data>\n\n"
+
+    if "MATH" in decision:
+        math_expression = re.sub(r'[^0-9\+\-\*\/\(\)\.]', '', request.prompt)
+        try:
+            collected_context += f"<math_calculation>\n{calculate_math(math_expression)}\n</math_calculation>\n\n"
+        except:
+            pass
+
