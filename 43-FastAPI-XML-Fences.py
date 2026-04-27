@@ -63,3 +63,22 @@ ROUTING RULES:
     return response.json()["choices"][0]["message"]["content"].strip().upper()
 
 
+def get_wiki_topic(user_text):
+    topic_prompt = [
+        {"role": "system", "content": """You are a strict data extractor. Extract the main Wikipedia search topic from the user's prompt. 
+Output EXACTLY ONE NOUN PHRASE. DO NOT talk to the user. DO NOT echo instructions. If no clear Wikipedia topic exists, output 'NONE'."""},
+        {"role": "user", "content": user_text}
+    ]
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "llama-3.1-8b-instant", "messages": topic_prompt, "temperature": 0.0}
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)
+    return response.json()["choices"][0]["message"]["content"].strip()
+
+
+def send_to_cloud_ai(history_list):
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "llama-3.1-8b-instant", "messages": history_list, "temperature": 0.7}
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)
+    return response.json()["choices"][0]["message"]["content"]
+
+
