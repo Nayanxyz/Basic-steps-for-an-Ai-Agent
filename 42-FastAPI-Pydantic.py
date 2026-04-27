@@ -17,3 +17,9 @@ class SwarmResponse(BaseModel):
     final_answer: str
 
 
+# 3. Create the Endpoint (The Kitchen Window)
+@app.post("/chat", response_model=SwarmResponse)
+async def chat_with_swarm(request: UserRequest):
+    # --- DEBUGGER: Print what the server received ---
+    print(f"\n[SERVER LOG] Received prompt from {request.user_id}: '{request.prompt}'")
+
