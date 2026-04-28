@@ -63,3 +63,37 @@ ROUTING RULES:
     response = requests.post(CLOUD_URL, headers=headers, json=payload)
     return response.json()["choices"][0]["message"]["content"].strip().upper()
 
+# The Micro Agent
+def get_search_query(user_text):
+    topic_prompt = [
+        {"role": "system", "content": """You are an SEO Search Expert. Read the user's prompt and extract the best possible Google Search Query to find the answer.
+Ignore math and internal company questions. Output EXACTLY ONE SEARCH STRING. DO NOT talk to the user.
+Example: 'Who won the 2024 Super Bowl and what is 5+5?' -> '2024 Super Bowl winner'
+Example: 'who is the current chess world champion?' -> 'current chess world champion 2024'"""},
+        {"role": "user", "content": user_text}
+    ]
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "llama-3.1-8b-instant", "messages": topic_prompt, "temperature": 0.0}
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)
+    return response.json()["choices"][0]["message"]["content"].strip()
+
+
+def send_to_cloud_ai(history_list):
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "llama-3.1-8b-instant", "messages": history_list, "temperature": 0.7}
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)
+    return response.json()["choices"][0]["message"]["content"]
+
+
+def compress_memory(history_list):
+    compression_payload = [
+        {"role": "system",
+         "content": "You are a backend memory manager. Generate a detailed 'Running Fact Sheet' from the log."},
+        {"role": "user", "content": str(history_list)}
+    ]
+    return send_to_cloud_ai(compression_payload)
+
+
+def calculate_math(expression):
+    return eval(str(expression))
+
