@@ -115,3 +115,34 @@ def perform_web_search(query):
         return "No web data could be retrieved."
 
 
+# ==========================================
+# 4. THE API ENDPOINT (The Swarm Pipeline)
+# ==========================================
+@app.post("/chat", response_model=SwarmResponse)
+async def chat_with_swarm(request: UserRequest):
+    print(f"\n--- NEW REQUEST FROM [{request.user_id}] ---")
+
+    # [API UPGRADE]: Pull up the specific user's memory, or create a new one if they are new
+    if request.user_id not in active_sessions:
+        active_sessions[request.user_id] = [
+            {"role": "system",
+             "content": "You are the Senior Synthesis AI. Answer clearly using the provided system data."}
+        ]
+
+    # 1. Commit user message to their specific memory
+    user_history = active_sessions[request.user_id]
+    user_history.append({"role": "user", "content": request.prompt})
+
+    # 2. Background Janitor
+    if len(user_history) > 6:
+        print(f"[SERVER LOG] Compressing memory for {request.user_id}...")
+        compressed_text = compress_memory(user_history[:-1])
+        active_sessions[request.user_id] = [user_history[0],
+                                            {"role": "system", "content": f"Fact Sheet:\n{compressed_text}"},
+                                            user_history[-1]]
+        user_history = active_sessions[request.user_id]
+
+    # 3. Manager Routing
+    decision = get_manager_decision(request.prompt)
+    print(f"[SERVER LOG] Manager routed to: {decision}")
+
