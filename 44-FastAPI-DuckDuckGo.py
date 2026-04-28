@@ -44,3 +44,22 @@ class SwarmResponse(BaseModel):
     final_answer: str
 
 
+# ==========================================
+# 3. CORE AI FUNCTIONS (Unchanged from Phase 10)
+# ==========================================
+def get_manager_decision(user_text):
+    orchestrator_prompt = [
+        {"role": "system", "content": """You are the Orchestrator. Route the user's input.
+You must output ONLY a comma-separated list of departments. DO NOT explain your reasoning.
+ROUTING RULES:
+1. Output 'WEB' for live events, weather, sports, recent news.
+2. Output 'RAG' for internal company data, passwords.
+3. Output 'CHAT' for small talk.
+4. Output 'MATH' for calculation mathematics."""},
+        {"role": "user", "content": user_text}
+    ]
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "llama-3.1-8b-instant", "messages": orchestrator_prompt, "temperature": 0.0}
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)
+    return response.json()["choices"][0]["message"]["content"].strip().upper()
+
