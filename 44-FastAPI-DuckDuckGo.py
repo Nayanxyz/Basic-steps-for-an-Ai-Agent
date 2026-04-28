@@ -168,3 +168,17 @@ async def chat_with_swarm(request: UserRequest):
         except:
             pass
 
+    # 5. Final Synthesis
+    if collected_context != "":
+        # Give the AI crystal clear instructions on how to read the XML
+        final_prompt = f"""You are a helpful Enterprise AI. Read the XML data provided below. 
+    You must address EVERY question the user asked. Do not leave anything out. Do not mention the XML tags to the user.
+
+    SYSTEM DATA:
+    {collected_context}
+
+    USER PROMPT: {request.prompt}"""
+        temp_memory[-1] = {"role": "user", "content": final_prompt}
+
+    ai_words = send_to_cloud_ai(temp_memory)
+
