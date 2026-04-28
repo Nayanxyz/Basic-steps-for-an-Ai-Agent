@@ -97,3 +97,21 @@ def compress_memory(history_list):
 def calculate_math(expression):
     return eval(str(expression))
 
+# scrape wikipedia but 100x smarter with ddg
+def perform_web_search(query):
+    print(f"\n[SERVER LOG] Searching the live web for: '{query}'")
+    try:
+        with DDGS() as ddgs:
+            # Grab the top 3 search results
+            results = list(ddgs.text(query, max_results=3))
+
+        context = ""
+        for res in results:
+            context += f"Source: {res['title']}\nSnippet: {res['body']}\n\n"
+
+        return context
+    except Exception as e:
+        print(f"[SERVER LOG] Web search failed: {e}")
+        return "No web data could be retrieved."
+
+
