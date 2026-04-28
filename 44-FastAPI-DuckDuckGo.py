@@ -182,3 +182,16 @@ async def chat_with_swarm(request: UserRequest):
 
     ai_words = send_to_cloud_ai(temp_memory)
 
+    # 6. Final Commit & Return Payload
+    user_history.append({"role": "assistant", "content": ai_words})
+
+    print("--- REQUEST COMPLETE ---")
+
+    return SwarmResponse(
+        manager_routing=decision,
+        final_answer=ai_words
+    )
+
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
