@@ -57,3 +57,31 @@ ROUTING RULES:
     return response.json()["choices"][0]["message"]["content"].strip().upper()                                       # Extracts and cleans the one-word answer
 
 
+def get_search_query(user_text):                                                                                     # Defines the Micro-Agent function
+
+    today = datetime.now().strftime("%B %d, %Y")                                                                     # Gets today's exact date as a string
+    current_year = datetime.now().year                                                                               # Gets the current 4-digit year
+
+    topic_prompt = [                                                                                                 # Creates the message list for the Micro-Agent
+        {"role": "system", "content": f"""You are an SEO Search Expert. Today is {today}.
+Your ONLY job is to extract the live news or web search topic from the user's prompt.
+CRITICAL RULES:
+1. IGNORE math equations.
+2. IGNORE internal company questions (passwords, wifi, etc.).
+3. If the user asks about current events, append the year '{current_year}' to the search string.
+4. Output EXACTLY ONE string. Do not talk.
+
+EXAMPLES:
+User: "What is 5+5 and who won the Super Bowl?" -> "Super Bowl winner {current_year}"
+User: "what is wifi password, Bengal election results, and 8/2?" -> "Bengal election results {current_year}"
+User: "Hello, what is the weather in Tokyo?" -> "Tokyo weather {today}"
+"""},                                                                                                                # Uses Few-Shot examples and temporal injection
+        {"role": "user", "content": user_text}                                                                       # Injects the messy user prompt
+    ]
+
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}                             # Packages the security badge
+    payload = {"model": "llama-3.1-8b-instant", "messages": topic_prompt, "temperature": 0.0}                               # Packages the request with 0 creativity
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)                                               # Sends the request to Groq
+    return response.json()["choices"][0]["message"]["content"].strip()                                               # Extracts and cleans the search query
+
+
