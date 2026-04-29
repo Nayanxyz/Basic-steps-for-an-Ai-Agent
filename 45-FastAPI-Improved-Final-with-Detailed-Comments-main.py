@@ -126,3 +126,33 @@ def perform_web_search(query):                                                  
         return "No web data could be retrieved."                                                                     # Returns a safe fallback message
 
 
+# === KEY STEP 6: THE API ENDPOINT (FRONT DOOR) ===
+@app.post("/chat", response_model=SwarmResponse)                                                                # Opens the /chat URL and enforces the output contract
+async def chat_with_swarm(request: UserRequest):                                                                     # Creates the async function that accepts the user's ticket
+
+    print(f"\n--- NEW REQUEST FROM [{request.user_id}] ---")                                                         # Prints a log indicating a new user request arrived
+
+    # === KEY STEP 7: MEMORY MANAGEMENT ===
+    if request.user_id not in active_sessions:                                                                       # Checks if the user is completely new
+        active_sessions[request.user_id] = [                                                                         # Creates a brand new chat history list for them
+            {"role": "system", "content": "You are the Senior Synthesis AI. "
+                                          "Answer clearly using the provided system data."}                          # Inserts the base personality
+        ]
+
+    user_history = active_sessions[request.user_id]                                                                  # Pulls the specific user's folder from the cabinet
+    user_history.append({"role": "user", "content": request.prompt})                                                 # Appends their new question to the bottom of the list
+
+    if len(user_history) > 6:                                                                                        # Checks if the file is getting too heavy (over 6 messages)
+
+        print(f"[SERVER LOG] Compressing memory for {request.user_id}...")                                           # Prints a log indicating compression is starting
+        compressed_text = compress_memory(user_history[:-1])                                                         # Sends everything except the newest message to the Janitor
+
+        active_sessions[request.user_id] = [                                                                         # Rebuilds the user's history list
+            user_history[0],                                                                                         # Keeps the system prompt
+            {"role": "system", "content": f"Fact Sheet:\n{compressed_text}"},                                        # Inserts the new Fact Sheet
+            user_history[-1]                                                                                         # Keeps the newest question
+        ]
+
+        user_history = active_sessions[request.user_id]                                                              # Refreshes the local variable with the newly compressed list
+
+
