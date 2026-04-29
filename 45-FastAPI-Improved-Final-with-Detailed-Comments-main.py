@@ -156,3 +156,35 @@ async def chat_with_swarm(request: UserRequest):                                
         user_history = active_sessions[request.user_id]                                                              # Refreshes the local variable with the newly compressed list
 
 
+    # === KEY STEP 8: PIPELINE ROUTING ===
+    decision = get_manager_decision(request.prompt)                                                                  # Asks the Manager which departments to open
+
+    print(f"[SERVER LOG] Manager routed to: {decision}")                                                             # Prints the Manager's decision to the terminal
+
+    temp_memory = user_history.copy()                                                                                # Creates a temporary clone of the memory so we don't pollute the UI
+    collected_context = ""                                                                                           # Creates a blank clipboard to hold backend data
+
+    if "RAG" in decision:                                                                                            # Checks if RAG was chosen
+        results = collection.query(query_texts=[request.prompt], n_results=1)                                        # Searches ChromaDB for the closest match
+        collected_context += f"<internal_company_data>\n{results['documents'][0][0]}\n</internal_company_data>\n\n"   # Wraps data in XML and staples it to clipboard
+
+    if "WEB" in decision:                                                                                            # Checks if WEB was chosen
+        optimized_query = get_search_query(request.prompt)                                                           # Asks the Micro-Agent to clean the search topic
+        if optimized_query != "NONE":                                                                                # Ensures the topic isn't empty
+            live_data = perform_web_search(optimized_query)                                                          # Scrapes DuckDuckGo for live news
+            collected_context += f"<live_web_data query='{optimized_query}'>\n{live_data}\n</live_web_data>\n\n"     # Wraps data in XML and staples it to clipboard
+
+    if "MATH" in decision:                                                                                           # Checks if MATH was chosen
+        math_expression = re.sub(r'[^0-9\+\-\*\/\(\)\.]', '', request.prompt)                            # Uses Regex Bouncer to delete all letters
+        print(f"[SERVER LOG] MATH Department extracted equation: '{math_expression}'")                               # Prints the cleaned equation
+
+        try:                                                                                                         # Starts a safe execution block
+            answer = calculate_math(math_expression)                                                                 # Uses Python to solve the math
+            print(f"[SERVER LOG] MATH Department calculated: {answer}")                                              # Prints the final answer
+            collected_context += (f"<math_calculation>"
+                                  f"\nThe exact mathematical answer to the user's equation is: {answer}"
+                                  f"\n</math_calculation>\n\n")                                                      # Wraps answer in XML and staples it
+
+        except Exception as e:                                                                                       # Catches division by zero or invalid math
+            print(f"[SERVER LOG] MATH failed: {e}")                                                                  # Prints the error to the terminal
+
