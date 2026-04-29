@@ -209,3 +209,17 @@ USER PROMPT: {request.prompt}"""                                                
 
     ai_words = send_to_cloud_ai(temp_memory)                                                                         # Sends the cloned memory to Groq for the final answer
 
+
+    # === KEY STEP 10: COMMIT AND RETURN ===
+    user_history.append({"role": "assistant", "content": ai_words})                                                 # Saves the AI's final answer to the real memory file
+
+    print("--- REQUEST COMPLETE ---")                                                                               # Prints a completion log
+
+    return SwarmResponse(                                                                                           # Packages the data into the Pydantic box
+        manager_routing=decision,                                                                                   # Includes the routing tags
+        final_answer=ai_words                                                                                       # Includes the final English text
+    )
+
+# === KEY STEP 11: POWER GRID ===
+if __name__ == "__main__":                                                                                          # Checks if the script is being run directly
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)                                            # Turns on the server, listens on port 8000, and auto-reloads on save
