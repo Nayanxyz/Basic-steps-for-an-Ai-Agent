@@ -188,3 +188,24 @@ async def chat_with_swarm(request: UserRequest):                                
         except Exception as e:                                                                                       # Catches division by zero or invalid math
             print(f"[SERVER LOG] MATH failed: {e}")                                                                  # Prints the error to the terminal
 
+
+    # === KEY STEP 9: FINAL SYNTHESIS (BUG FIXED HERE) ===
+    if collected_context != "":                                                                                      # Checks if ANY data was collected on the clipboard (Fixed Indentation!)
+
+        final_prompt = f"""You are a helpful Enterprise AI. Read the XML data provided below. 
+You MUST address every single piece of data provided in the XML tags. 
+Checklist:
+- Did you answer the company data question?
+- Did you answer the live web question?
+- Did you explicitly state the math calculation result?
+Do not mention the XML tags or this checklist to the user. Just provide the answers.
+
+SYSTEM DATA:
+{collected_context}
+
+USER PROMPT: {request.prompt}"""                                                                                     # Builds a massive instruction packet with the XML and Checklist
+
+        temp_memory[-1] = {"role": "user", "content": final_prompt}                                                  # Swaps the user's basic question with this massive packet in the cloned memory
+
+    ai_words = send_to_cloud_ai(temp_memory)                                                                         # Sends the cloned memory to Groq for the final answer
+
