@@ -85,3 +85,25 @@ User: "Hello, what is the weather in Tokyo?" -> "Tokyo weather {today}"
     return response.json()["choices"][0]["message"]["content"].strip()                                               # Extracts and cleans the search query
 
 
+def send_to_cloud_ai(history_list):                                                                                  # Defines the main bridge function
+
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}                             # Packages the security badge
+    payload = {"model": "llama-3.1-8b-instant", "messages": history_list, "temperature": 0.7}                        # Packages the request with natural creativity (0.7)
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)                                               # Sends the request to Groq
+    return response.json()["choices"][0]["message"]["content"]                                                       # Extracts the final AI English response
+
+
+def compress_memory(history_list):                                                                                   # Defines the Background Janitor function
+
+    compression_payload = [                                                                                          # Creates a special message list for summarizing
+        {"role": "system", "content": "You are a backend memory manager. "
+                                      "Generate a detailed 'Running Fact Sheet' from the log."},                     # Tells AI to summarize
+        {"role": "user", "content": str(history_list)}                                                               # Converts the long history list into a text block
+    ]
+    return send_to_cloud_ai(compression_payload)                                                                     # Sends the summary request to Groq and returns the Fact Sheet
+
+
+def calculate_math(expression):                                                                                      # Defines the Math worker function
+    return eval(str(expression))                                                                                     # Uses Python's native calculator to solve the string equation
+
+
