@@ -37,3 +37,23 @@ class SwarmResponse(BaseModel):                                                 
     final_answer: str                                                                                                # Promises the output will contain the final AI text
 
 
+# === KEY STEP 5: CORE AI WORKERS ===
+def get_manager_decision(user_text):                                                                                 # Defines the Orchestrator function
+
+    orchestrator_prompt = [                                                                                          # Creates the message list for the AI
+        {"role": "system", "content": """You are the Orchestrator. Route the user's input.
+You must output ONLY a comma-separated list of departments. DO NOT explain your reasoning.
+ROUTING RULES:
+1. Output 'WEB' for live events, weather, sports, recent news.
+2. Output 'RAG' for internal company data, passwords.
+3. Output 'CHAT' for small talk.
+4. Output 'MATH' for calculation mathematics."""},                                                                   # The strict rules for the Manager
+        {"role": "user", "content": user_text}                                                                       # Injects the user's actual question
+    ]
+
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}                             # Packages the security badge
+    payload = {"model": "llama-3.1-8b-instant", "messages": orchestrator_prompt, "temperature": 0.0}                 # Packages the API request with 0 creativity
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)                                               # Sends the request to Groq over the internet
+    return response.json()["choices"][0]["message"]["content"].strip().upper()                                       # Extracts and cleans the one-word answer
+
+
