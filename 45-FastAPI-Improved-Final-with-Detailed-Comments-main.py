@@ -107,3 +107,22 @@ def calculate_math(expression):                                                 
     return eval(str(expression))                                                                                     # Uses Python's native calculator to solve the string equation
 
 
+def perform_web_search(query):                                                                                       # Defines the live DuckDuckGo worker function
+
+    print(f"\n[SERVER LOG] Searching the LIVE NEWS for: '{query}'")                                                  # Prints a debugging log to the terminal
+
+    try:                                                                                                             # Starts a safe execution block
+        with DDGS() as ddgs:                                                                                         # Opens a connection to DuckDuckGo
+            results = list(ddgs.news(query, max_results=3))                                                          # Grabs the top 3 live news articles
+        context = ""                                                                                                 # Creates a blank string to hold the news data
+
+        for res in results:                                                                                          # Loops through each of the 3 articles
+            context += (f"Source: {res['title']}\nDate Published: {res.get('date', 'Recent')}"
+                        f"\nSnippet: {res['body']}\n\n")                                                             # Formats and stacks the news data
+        return context                                                                                               # Returns the fully formatted news string
+
+    except Exception as e:                                                                                           # Catches errors like rate limits or no internet
+        print(f"[SERVER LOG] Web search failed: {e}")                                                                # Prints the error to the terminal
+        return "No web data could be retrieved."                                                                     # Returns a safe fallback message
+
+
