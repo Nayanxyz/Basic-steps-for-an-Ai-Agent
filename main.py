@@ -160,3 +160,30 @@ async def chat_with_swarm(request: UserRequest):
     decision = get_manager_decision(request.prompt)
     print(f"[SERVER LOG] Manager routed to: {decision}")
 
+    # 4. The Pipeline
+    temp_memory = user_history.copy()
+    collected_context = ""
+
+    if "RAG" in decision:
+        results = collection.query(query_texts=[request.prompt], n_results=1)
+        # Wrap data in clear XML tags
+        collected_context += f"<internal_company_data>\n{results['documents'][0][0]}\n</internal_company_data>\n\n"
+
+    if "WEB" in decision:
+        optimized_query = get_search_query(request.prompt)
+        if optimized_query != "NONE":
+            live_data = perform_web_search(optimized_query)
+            collected_context += f"<live_web_data query='{optimized_query}'>\n{live_data}\n</live_web_data>\n\n"
+
+    if "MATH" in decision:
+        math_expression = re.sub(r'[^0-9\+\-\*\/\(\)\.]', '', request.prompt)
+        print(f"[SERVER LOG] MATH Department extracted equation: '{math_expression}'")
+        try:
+            answer = calculate_math(math_expression)
+            print(f"[SERVER LOG] MATH Department calculated: {answer}")
+
+            # [UPGRADE] Make the math context a full sentence so the AI doesn't ignore it
+            collected_context += f"<math_calculation>\nThe exact mathematical answer to the user's equation is: {answer}\n</math_calculation>\n\n"
+        except Exception as e:
+            print(f"[SERVER LOG] MATH failed: {e}")
+
