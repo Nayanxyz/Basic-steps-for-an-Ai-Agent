@@ -110,3 +110,22 @@ def compress_memory(history_list):
 def calculate_math(expression):
     return eval(str(expression))
 
+# Scrape Wikipedia but 100x smarter with duckduckgo
+def perform_web_search(query):
+    print(f"\n[SERVER LOG] Searching the LIVE NEWS for: '{query}'")
+    try:
+        with DDGS() as ddgs:
+            # Change .text to .news to force it to pull current affairs!
+            results = list(ddgs.news(query, max_results=3))
+
+        context = ""
+        for res in results:
+            # News results usually have a 'date' attached, which is great for the AI
+            context += f"Source: {res['title']}\nDate Published: {res.get('date', 'Recent')}\nSnippet: {res['body']}\n\n"
+
+        return context
+    except Exception as e:
+        print(f"[SERVER LOG] Web search failed: {e}")
+        return "No web data could be retrieved."
+
+
