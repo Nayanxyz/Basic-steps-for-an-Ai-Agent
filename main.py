@@ -90,3 +90,23 @@ User: "Hello, what is the weather in Tokyo?" -> "Tokyo weather {today}"
     response = requests.post(CLOUD_URL, headers=headers, json=payload)
     return response.json()["choices"][0]["message"]["content"].strip()
 
+
+def send_to_cloud_ai(history_list):
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "llama-3.1-8b-instant", "messages": history_list, "temperature": 0.7}
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)
+    return response.json()["choices"][0]["message"]["content"]
+
+
+def compress_memory(history_list):
+    compression_payload = [
+        {"role": "system",
+         "content": "You are a backend memory manager. Generate a detailed 'Running Fact Sheet' from the log."},
+        {"role": "user", "content": str(history_list)}
+    ]
+    return send_to_cloud_ai(compression_payload)
+
+
+def calculate_math(expression):
+    return eval(str(expression))
+
