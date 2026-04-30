@@ -30,3 +30,16 @@ try:
 except:
     pass
 
+
+# ==========================================
+# 2. PYDANTIC DATA CONTRACTS
+# ==========================================
+class UserRequest(BaseModel):
+    user_id: str
+    prompt: str
+
+
+class SwarmResponse(BaseModel):
+    manager_routing: str
+    final_answer: str
+
