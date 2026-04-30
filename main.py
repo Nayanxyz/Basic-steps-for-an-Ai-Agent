@@ -62,3 +62,31 @@ ROUTING RULES:
     payload = {"model": "llama-3.1-8b-instant", "messages": orchestrator_prompt, "temperature": 0.0}
     response = requests.post(CLOUD_URL, headers=headers, json=payload)
     return response.json()["choices"][0]["message"]["content"].strip().upper()
+
+# The Micro Agent
+def get_search_query(user_text):
+    today = datetime.now().strftime("%B %d, %Y")
+    current_year = datetime.now().year
+
+    topic_prompt = [
+        {"role": "system", "content": f"""You are an SEO Search Expert. Today is {today}.
+Your ONLY job is to extract the live news or web search topic from the user's prompt.
+CRITICAL RULES:
+1. IGNORE math equations.
+2. IGNORE internal company questions (passwords, wifi, etc.).
+3. If the user asks about current events, append the year '{current_year}' to the search string.
+4. Output EXACTLY ONE string. Do not talk.
+
+EXAMPLES:
+User: "What is 5+5 and who won the Super Bowl?" -> "Super Bowl winner {current_year}"
+User: "what is wifi password, Bengal election results, and 8/2?" -> "Bengal election results {current_year}"
+User: "Hello, what is the weather in Tokyo?" -> "Tokyo weather {today}"
+"""},
+        {"role": "user", "content": user_text}
+    ]
+
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "llama-3.1-8b-instant", "messages": topic_prompt, "temperature": 0.0}
+    response = requests.post(CLOUD_URL, headers=headers, json=payload)
+    return response.json()["choices"][0]["message"]["content"].strip()
+
