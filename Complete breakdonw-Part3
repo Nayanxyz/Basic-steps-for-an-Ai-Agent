@@ -152,3 +152,44 @@ Advanced Phase 4: Multi-Routing (The Pipeline) & Micro-Agents
     ..➡️ Micro-Agent Cleans Web Topic ➡️ Python Opens WEB Door (Adds data to pile) ➡️ Python Opens MATH Door (Adds data to pile)..
     ...➡️ Python Hands the Massive Pile to Final AI ➡️ Final AI Writes One Perfect Answer.
 
+THE GRAND MASTER PIPELINE (Connecting Every Phase)
+
+    Here is the overall picture of the entire Enterprise Architecture we built, from Phase 1 all the way to Phase 10.
+    When a user presses "Enter" on their keyboard, this is exactly what happens in our system:
+
+    1. The User Interface (Phase 7):
+
+        The user types a message into the beautiful Streamlit Web UI.
+
+    2. The Memory Janitor (Phase 8):
+
+        Before doing anything, the system checks how long the chat history is. If it's too heavy,
+        a background AI crushes the old messages into a tiny "Fact Sheet" and splices the memory back together.
+
+    3. The Shadow Clone (Phase 7):
+
+        We make a hidden photocopy of the chat history (temp_memory) so we can do messy backend work without ruining the user's visible screen.
+
+    4. The Manager (Phase 9):
+        We send the user's question to the Orchestrator AI. The Manager reads it and outputs routing tags (e.g., WEB, RAG).
+
+    5. The Data Collection Pipeline (Phase 10):
+
+        Python creates a blank piece of paper (collected_context) and begins walking down the hallways based on the Manager's tags.
+
+        The RAG Hallway (Phase 5): Python mathematically searches ChromaDB, finds the closest internal company document, and adds it to the paper.
+
+        The WEB Hallway (Phase 6 & 10): A Micro-Agent extracts the search topic. Python forges browser headers,
+        scrapes Wikipedia using BeautifulSoup, and adds the text to the paper.
+
+        The MATH Hallway (Phase 10): The Regex Bouncer deletes English words, eval() solves the math, and Python adds the answer to the paper.
+
+    6. The Final Synthesis (Phase 1 & 4):
+
+        We take the fully written piece of paper containing all the gathered data, inject it into the Shadow Clone memory,
+        and use the requests.post API Bridge to send it to the cloud.
+
+    7. The Output:
+
+        The Final Worker AI reads the data, speaks in natural English, and Streamlit prints the beautiful answer on the user's screen.
+        The infinite while loop (Phase 1) resets, waiting for the user to ask another question.
