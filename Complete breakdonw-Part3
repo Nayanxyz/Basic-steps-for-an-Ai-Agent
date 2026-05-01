@@ -1,0 +1,22 @@
+Advanced Phase 3: Multi-Agent Orchestration (The Swarm)
+
+(Note: In our journey, this was Phase 9)
+
+1. Explanation of the Phase
+
+    In the early phases, we had one single AI doing all the work. It had to read the database, decide if it needed a tool,
+    format complex code, and talk to the user. In this advanced phase, we stopped treating the AI like a solo worker.
+    Instead, we built a Swarm—a team of specialized AIs managed by a "Supervisor" or "Manager" AI. The Manager's only
+    job is to direct traffic, and the workers' only job is to answer the specific question.
+
+2. Usages (In Steps)
+
+    Routing Traffic: We use the Manager to read the user's sentence and decide
+                     which department (WEB, RAG, MATH, or CHAT) it belongs to.
+
+    Triggering Tools: We use the Manager's decision to trigger Python scripts (like Web Scraping) automatically,
+                      without forcing the AI to write complex code.
+
+    Specialized Answering: We use specialized worker prompts to answer the user based only on
+                           the data their specific department found.
+
