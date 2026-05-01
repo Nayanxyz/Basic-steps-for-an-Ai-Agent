@@ -146,3 +146,9 @@ Advanced Phase 4: Multi-Routing (The Pipeline) & Micro-Agents
     Micro-Agents (Concept): A tiny, highly restricted AI prompt that doesn't talk to the user, but just formats
                             data for the backend code (like extracting "Mount Everest" from a long sentence).
 
+7. Master Pipeline for Advanced Phase 4
+
+    User Asks 3 Questions ➡️ Manager Yells "RAG, WEB, MATH!" ➡️ Python Opens RAG Door (Adds data to pile)..
+    ..➡️ Micro-Agent Cleans Web Topic ➡️ Python Opens WEB Door (Adds data to pile) ➡️ Python Opens MATH Door (Adds data to pile)..
+    ...➡️ Python Hands the Massive Pile to Final AI ➡️ Final AI Writes One Perfect Answer.
+
