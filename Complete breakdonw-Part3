@@ -69,3 +69,8 @@ Advanced Phase 3: Multi-Agent Orchestration (The Swarm)
 
     if / elif / else (Python Framework): This is Python's native decision-making tool. It acts as physical doors.
                                          If one door opens, the others remain locked.
+
+7. Master Pipeline for Advanced Phase 3
+
+    User Types Message ➡️ Manager AI Reads it ➡️ Manager Yells "WEB!" ➡️ Python Opens the WEB Door..
+    ..➡️ Python Scrapes Wikipedia ➡️ Python Hands Data to Worker AI ➡️ Worker AI Speaks to User.
