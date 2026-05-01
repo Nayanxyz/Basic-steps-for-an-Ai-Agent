@@ -20,3 +20,25 @@ Advanced Phase 3: Multi-Agent Orchestration (The Swarm)
     Specialized Answering: We use specialized worker prompts to answer the user based only on
                            the data their specific department found.
 
+3. What We Did (In Steps)
+
+    We deleted the old, complicated rules that forced the AI to output {JSON} commands.
+
+    We created a brand new AI prompt called the get_manager_decision.
+
+    We wrote a strict rulebook telling the Manager to output exactly one word (the department name).
+
+    We built a "Switchboard" in Python using if / elif / else statements to act as different hallways.
+
+4. How We Did It (In Steps)
+
+    We intercepted the user's input before it reached the main AI.
+
+    We sent that input secretly to the Manager AI.
+
+    We captured the Manager's one-word answer (e.g., "WEB") and saved it as a variable.
+
+    We told Python: "If the variable says 'WEB', run the Wikipedia scraper.
+                    Else if the variable says 'RAG', search the database."
+
+    Python gathered the data, built a specific prompt, and sent it to the Final Worker AI to speak to the user.
