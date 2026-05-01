@@ -74,3 +74,23 @@ Advanced Phase 3: Multi-Agent Orchestration (The Swarm)
 
     User Types Message ➡️ Manager AI Reads it ➡️ Manager Yells "WEB!" ➡️ Python Opens the WEB Door..
     ..➡️ Python Scrapes Wikipedia ➡️ Python Hands Data to Worker AI ➡️ Worker AI Speaks to User.
+
+Advanced Phase 4: Multi-Routing (The Pipeline) & Micro-Agents
+
+    (Note: In our journey, this was Phase 10)
+
+1. Explanation of the Phase
+
+    The Swarm was great, but it was rigid. If a user asked a multi-part question (e.g., "What is the weather AND what is 2+2?"),
+    the elif switchboard could only pick one hallway and ignored the other. In this final phase, we transformed the Switchboard
+    into a Pipeline. We allowed the Manager to pick multiple departments, and we allowed Python to walk down every single hallway,
+    collect all the data into one massive pile, and hand it to a Final Synthesis AI.
+    We also introduced "Micro-Agents" to clean up messy human data.
+
+2. Usages (In Steps)
+
+    Multi-Tasking: We use the Pipeline to answer huge, complex prompts that require multiple different tools at the same time.
+
+    Data Cleaning: We use Micro-Agents to extract specific keywords from long sentences so our web scrapers don't break.
+
+    Safe Math: We use Python to do actual calculations instead of letting the AI guess numbers.
