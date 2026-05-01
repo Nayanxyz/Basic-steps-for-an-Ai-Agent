@@ -42,3 +42,30 @@ Advanced Phase 3: Multi-Agent Orchestration (The Swarm)
                     Else if the variable says 'RAG', search the database."
 
     Python gathered the data, built a specific prompt, and sent it to the Final Worker AI to speak to the user.
+
+5. Purpose (In Steps)
+
+    To Prevent Confusion: By giving AIs only one job, we stopped them from suffering "Prompt Bleed"
+                          (getting confused by too many rules).
+
+    To Increase Speed: Python routing is instantly fast compared to waiting for an AI to generate tool commands.
+
+    To Improve Stability: Removing Regex and JSON interceptors meant the code stopped crashing when the AI made a typo.
+
+6. Libraries, Tools, and Arguments Used
+
+    The Groq API Payload (requests.post): We used this tool to talk to the AI in the cloud.
+
+    model="llama-3.1-8b-instant": This is the specific "brain" we rented from the cloud.
+
+    temperature=0.0 (Argument):
+
+    Explanation: Temperature controls how creative the AI is.
+
+    Example (Hard to Understand): Think of temperature like hiring an employee. temperature=0.7 is an Artist;
+                                  they are creative, they chat, they make things up. temperature=0.0 is a strict Accountant;
+                                  they are purely logical, predictable, and boring. For our Manager, we used 0.0 so it acts
+                                  like a strict traffic cop and never hallucinates.
+
+    if / elif / else (Python Framework): This is Python's native decision-making tool. It acts as physical doors.
+                                         If one door opens, the others remain locked.
