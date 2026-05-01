@@ -94,3 +94,23 @@ Advanced Phase 4: Multi-Routing (The Pipeline) & Micro-Agents
     Data Cleaning: We use Micro-Agents to extract specific keywords from long sentences so our web scrapers don't break.
 
     Safe Math: We use Python to do actual calculations instead of letting the AI guess numbers.
+
+3. What We Did (In Steps)
+
+    We updated the Manager's prompt to allow it to output a comma-separated list (e.g., "WEB, MATH").
+
+    We changed Python's elif statements to if statements so multiple doors could open at once.
+
+    We created a blank string called collected_context to hold all our data.
+
+    We created a tiny new AI (Micro-Agent) called get_wiki_topic to extract just the noun for Wikipedia.
+
+4. How We Did It (In Steps)
+
+    When the Manager outputs "WEB, MATH", Python checks the first if statement ("Is WEB in this list?").
+    It is, so it runs the scraper and stacks the text onto collected_context.
+
+    Python moves down to the next if statement ("Is MATH in this list?"). It is, so it does the math and stacks the answer onto collected_context.
+
+    At the very end of the script, we take the massive collected_context pile and send it to the Final Synthesis AI in one single API call.
+
