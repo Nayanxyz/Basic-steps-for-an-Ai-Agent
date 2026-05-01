@@ -114,3 +114,35 @@ Advanced Phase 4: Multi-Routing (The Pipeline) & Micro-Agents
 
     At the very end of the script, we take the massive collected_context pile and send it to the Final Synthesis AI in one single API call.
 
+5. Purpose (In Steps)
+
+    To Handle Human Unpredictability: Real users ask multiple questions at once. This ensures no question is ignored.
+
+    To Save Money/API Calls: Instead of calling the AI separately for every tool, we collect all the data first and do one final, cheap AI call.
+
+    To Prevent Silent Failures: Micro-Agents ensure that if a user types a messy sentence, the scraper still gets a clean URL.
+
+6. Libraries, Tools, and Arguments Used
+
+    The += Operator (Python Tool):
+
+    Explanation: This tool adds new data to an existing variable without deleting what was already there.
+
+    Example (Hard to Understand): Think of collected_context = "" as a blank piece of paper. When we use +=,
+                                  Python writes the Database info on line 1, moves down, and writes the Math info on line 2.
+                                  It staples the data together instead of erasing the old data.
+
+    re.sub(r'[^0-9\+\-\*\/\(\)\.]', '', user_input) (Regex Tool):
+
+    Explanation: This is a Regex string replacer.
+
+    Example (Hard to Understand): Think of Regex as a Bouncer at a VIP Club. The ^ symbol means "NOT".
+                                  We told the bouncer: "If a character is NOT a number (0-9) and NOT a math symbol (+, -, *, /)...
+                                  kick it out (delete it)." This turns "Hey what is 5+5?" into a clean "5+5".
+
+    eval() (Python Tool): This is a powerful Python function that reads a string of math (like "5+5") and actually solves
+                          it using the computer's processor.
+
+    Micro-Agents (Concept): A tiny, highly restricted AI prompt that doesn't talk to the user, but just formats
+                            data for the backend code (like extracting "Mount Everest" from a long sentence).
+
