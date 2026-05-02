@@ -323,3 +323,40 @@ Part 6: The Master Pipeline (The API Endpoint)
     What it implies: If MATH is chosen, Regex deletes the letters. eval() does the math. We enrich the answer into a
                      full sentence, wrap it in XML, and staple it to the clipboard.
 
+    Final Synthesis
+
+    Python
+
+        if collected_context != "":
+            final_prompt = f"""... Checklist: - Did you explicitly state the math calculation result?... SYSTEM DATA: \
+                                                                                        {collected_context} USER PROMPT: {request.prompt}"""
+                temp_memory[-1] = {"role": "user", "content": final_prompt}
+
+        ai_words = send_to_cloud_ai(temp_memory)
+
+    What it implies: If we gathered any data, we build a massive instruction packet with a strict Checklist.
+                     We secretly swap the user's short question in temp_memory with this massive packet. We send it to Groq.
+
+    Output/Example: ai_words becomes the final, perfect English paragraph: "The wifi password is BlueMonkey42, and 5*2 is 10...".
+
+    Return Payload
+
+        Python
+
+            user_history.append({"role": "assistant", "content": ai_words})
+            print("--- REQUEST COMPLETE ---")
+            return SwarmResponse(manager_routing=decision, final_answer=ai_words)
+
+    What it implies: We save the AI's final answer to the real memory file so it remembers it next time.
+                     We package the routing decision and the final answer into the Pydantic box and ship it back out to the internet.
+
+    The Power Button
+
+    Python
+
+    if __name__ == "__main__":
+        uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+
+    What it implies: If you run this file directly in the terminal, it turns on the electrical grid, plugs the server into
+                     port 8000, and keeps it running forever.
+
