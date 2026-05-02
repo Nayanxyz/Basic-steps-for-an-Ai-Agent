@@ -137,3 +137,43 @@ Part 5: Core AI Workers
 
     Output/Example: Converts "what is wifi password and who won the super bowl?" into "Super Bowl winner 2026".
 
+    The Main AI Bridge & Janitor
+
+    Python
+
+        def send_to_cloud_ai(history_list):
+            # ... payload with temperature=0.7 ...
+            return response.json()["choices"][0]["message"]["content"]
+
+        def compress_memory(history_list):
+            compression_payload = [{"role": "system", "content": "... Generate a 'Running Fact Sheet' ..."},
+                                   {"role": "user", "content": str(history_list)}]
+            return send_to_cloud_ai(compression_payload)
+
+    What it implies: send_to_cloud_ai is the primary talker (Temp 0.7 for natural language). compress_memory is
+                     the Janitor that squishes old chat history into a summary sheet to save space.
+
+    Output/Example: compress_memory outputs: "Fact Sheet: The user previously asked about chess and passwords."
+
+    The Math & Web Tools
+
+    Python
+
+        def calculate_math(expression):
+            return eval(str(expression))
+
+        def perform_web_search(query):
+            print(f"\n[SERVER LOG] Searching the LIVE NEWS for: '{query}'")
+            try:
+                with DDGS() as ddgs:
+                    results = list(ddgs.news(query, max_results=3))
+                # ... loops through results and formats them ...
+                return context
+            except Exception as e:
+                return "No web data could be retrieved."
+
+    What it implies: eval() forces Python's processor to solve math. DDGS().news() secretly opens a browser,
+                     searches DuckDuckGo, and scrapes the top 3 articles.
+
+    Output/Example: Math outputs 10. Web search outputs "Source: CNN \n Date: Today \n Snippet: The winner is...".
+
