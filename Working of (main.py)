@@ -83,3 +83,22 @@ Part 3: The Local Database
 
     Output/Example: The database now secretly holds the wifi password, mapped to the ID "doc1".
 
+Part 4: The Data Bouncers (Pydantic)
+
+    Python
+
+        class UserRequest(BaseModel):
+            user_id: str
+            prompt: str
+
+        class SwarmResponse(BaseModel):
+            manager_routing: str
+            final_answer: str
+
+    What it implies: These are strict security contracts.
+
+    Who connects to whom: These sit between the wild internet and our Python code.
+
+    Output/Example: If an app sends us data without a user_id, Pydantic rejects it automatically with a 422 Error
+                    before our AI even sees it. If successful, it forces our final output to exactly match the SwarmResponse format.
+
