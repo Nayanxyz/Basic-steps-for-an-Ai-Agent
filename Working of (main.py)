@@ -177,3 +177,38 @@ Part 5: Core AI Workers
 
     Output/Example: Math outputs 10. Web search outputs "Source: CNN \n Date: Today \n Snippet: The winner is...".
 
+Part 6: The Master Pipeline (The API Endpoint)
+
+    Python
+
+        @app.post("/chat", response_model=SwarmResponse)
+        async def chat_with_swarm(request: UserRequest):
+            print(f"\n--- NEW REQUEST FROM [{request.user_id}] ---")
+
+    What it implies: We open the front door. The async keyword allows multiple users to talk to the server at
+                     the exact same time without blocking each other.
+
+    -------------------------------------------------------------------------------------------------------------------------------------------------------
+    1. The @app.post("/chat") (The Mailroom Door)
+
+            Imagine your entire Python file is a massive Corporate Headquarters.
+            If a user on the internet wants to talk to your AI, they cannot just walk into the building and
+            start wandering the halls. They have to go to a specific door.
+
+            @ (The Python Decorator): This is a magic Python symbol that acts like a signpost.
+            It tells the server, "Hey, pay attention to the function right below me!"
+
+            app: This is the name of our FastAPI building.
+
+            .post: In the internet world, there are different ways to send mail.
+
+            A GET request means "I just want to read a webpage."
+
+            A POST request means "I am handing you a heavy package of data, and I need you to do work on it."
+
+            ("/chat"): This is the room number.
+
+            Translation: @app.post("/chat") literally means: "Put a mailbox on the outside of the building
+            labeled '/chat'. If a heavy package (POST) arrives at this mailbox, immediately hand it to the
+            Python function sitting right below this sign."
+
