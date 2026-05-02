@@ -1,0 +1,36 @@
+Part 1: The Toolbox (Imports)
+
+    Python
+
+        from ddgs import DDGS
+        from fastapi import FastAPI
+        from pydantic import BaseModel
+        import uvicorn
+        import os
+        import requests
+        import chromadb
+        import re
+        from dotenv import load_dotenv
+        from datetime import datetime
+
+    What it implies: We are pulling pre-built tools into our workspace so we don't have to write
+                     thousands of lines of foundational code from scratch.
+
+    Who connects to whom: DDGS connects Python to DuckDuckGo's live news servers.
+
+    FastAPI and uvicorn connect Python to your computer's internet ports.
+
+    BaseModel connects incoming web data to strict Python rules.
+
+    requests connects Python to Groq's cloud AI servers.
+
+    chromadb connects Python to a local folder on your hard drive to store text.
+
+    re connects Python to a text-filtering engine.
+
+    os and load_dotenv connect Python to your hidden .env password file.
+
+    datetime connects Python to your computer's internal clock.
+
+    Output/Example: Nothing prints to the screen. It just loads these tools into the computer's active memory.
+
