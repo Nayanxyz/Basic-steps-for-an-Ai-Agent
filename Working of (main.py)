@@ -34,3 +34,29 @@ Part 1: The Toolbox (Imports)
 
     Output/Example: Nothing prints to the screen. It just loads these tools into the computer's active memory.
 
+Part 2: Powering Up the Core
+
+    Python
+
+        load_dotenv()
+        API_KEY = os.getenv("GROQ_API_KEY")
+        CLOUD_URL = "https://api.groq.com/openai/v1/chat/completions"
+
+    What it implies: We are unlocking the doors and setting our GPS destination.
+
+    Who connects to whom: load_dotenv() connects to the .env file.
+
+    Output/Example: API_KEY now holds a string like "gsk_1234567...". CLOUD_URL holds the exact internet
+                    address of the Groq supercomputer.
+
+    Python
+
+        app = FastAPI(title="Enterprise Swarm API", version="1.0")
+        active_sessions = {}
+
+    What it implies: We build the physical web server (app). We also create a massive, blank filing cabinet
+                     (active_sessions) to hold memories for thousands of different users.
+
+    Output/Example: active_sessions outputs an empty dictionary: {}. Later, it will look like
+                    {"Alex": [chat history], "Sarah": [chat history]}.
+
