@@ -102,3 +102,38 @@ Part 4: The Data Bouncers (Pydantic)
     Output/Example: If an app sends us data without a user_id, Pydantic rejects it automatically with a 422 Error
                     before our AI even sees it. If successful, it forces our final output to exactly match the SwarmResponse format.
 
+Part 5: Core AI Workers
+
+    The Routing Manager
+
+    Python
+
+        def get_manager_decision(user_text):
+            orchestrator_prompt = [{"role": "system", "content": "...ROUTING RULES..."}, {"role": "user", "content": user_text}]
+            headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+            payload = {"model": "llama-3.1-8b-instant", "messages": orchestrator_prompt, "temperature": 0.0}
+            response = requests.post(CLOUD_URL, headers=headers, json=payload)
+            return response.json()["choices"][0]["message"]["content"].strip().upper()
+
+    What it implies: We package the user's text with strict rules and send it to the AI at temperature=0.0 (zero creativity).
+
+    Who connects to whom: Python connects to Groq via the internet.
+
+    Output/Example: Returns a clean, uppercase string: "WEB, MATH".
+
+    The Micro-Agent (Search Optimizer)
+
+    Python
+
+        def get_search_query(user_text):
+            today = datetime.now().strftime("%B %d, %Y")
+            current_year = datetime.now().year
+            # ... prompt with Few-Shot EXAMPLES ...
+            response = requests.post(CLOUD_URL, headers=headers, json=payload)
+            return response.json()["choices"][0]["message"]["content"].strip()
+
+    What it implies: Looks at the computer's clock to get today's date. Reads the messy prompt,
+                     drops math/company info, and outputs a perfect Google search.
+
+    Output/Example: Converts "what is wifi password and who won the super bowl?" into "Super Bowl winner 2026".
+
