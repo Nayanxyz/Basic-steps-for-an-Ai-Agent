@@ -248,3 +248,78 @@ Part 6: The Master Pipeline (The API Endpoint)
             request.prompt literally transforms into "Hello AI!"
     -----------------------------------------------------------------------------------------------------------------------------
 
+    Memory Management
+
+    Python
+
+        if request.user_id not in active_sessions:
+            active_sessions[request.user_id] = [{"role": "system", "content": "You are the Senior Synthesis AI..."}]
+
+        user_history = active_sessions[request.user_id]
+        user_history.append({"role": "user", "content": request.prompt})
+
+    What it implies: Multi-tenant architecture. We check the massive filing cabinet. If the user is new,
+                     we build them a folder. We then write their new question at the bottom of their specific folder.
+
+    The Janitor Execution
+
+    Python
+
+        if len(user_history) > 6:
+            print(f"[SERVER LOG] Compressing memory for {request.user_id}...")
+            compressed_text = compress_memory(user_history[:-1])
+            active_sessions[request.user_id] = [user_history[0],
+                                                {"role": "system", "content": f"Fact Sheet:\n{compressed_text}"}, user_history[-1]]
+            user_history = active_sessions[request.user_id]
+
+    What it implies: If the folder gets too thick (> 6 messages), we pass everything except the newest message ([:-1]) to
+                     the Janitor. We then rebuild the folder with just the rules, the summary sheet, and the newest question.
+
+    The Switchboard
+
+    Python
+
+        decision = get_manager_decision(request.prompt)
+        print(f"[SERVER LOG] Manager routed to: {decision}")
+
+        temp_memory = user_history.copy()
+        collected_context = ""
+
+    What it implies: The Manager reads the prompt and yells the departments. We photocopy the memory (temp_memory)
+                     so backend data doesn't pollute the user's clean chat history. We grab a blank clipboard (collected_context).
+
+    The Hallways (RAG, WEB, MATH)
+
+    Python
+
+        if "RAG" in decision:
+            results = collection.query(query_texts=[request.prompt], n_results=1)
+            collected_context += f"<internal_company_data>\n{results['documents'][0][0]}\n</internal_company_data>\n\n"
+
+    What it implies: If the Manager said RAG, we search ChromaDB, wrap the password in XML tags, and staple it to our clipboard (+=).
+
+    Python
+
+        if "WEB" in decision:
+            optimized_query = get_search_query(request.prompt)
+            if optimized_query != "NONE":
+                live_data = perform_web_search(optimized_query)
+                collected_context += f"<live_web_data query='{optimized_query}'>\n{live_data}\n</live_web_data>\n\n"
+
+    What it implies: If WEB is chosen, the Micro-Agent cleans the search. We search DuckDuckGo, wrap the news in XML tags,
+                     and staple it to the clipboard.
+
+    Python
+
+        if "MATH" in decision:
+            math_expression = re.sub(r'[^0-9\+\-\*\/\(\)\.]', '', request.prompt)
+            print(f"[SERVER LOG] MATH Department extracted equation: '{math_expression}'")
+            try:
+                answer = calculate_math(math_expression)
+                collected_context += f"<math_calculation>\nThe exact mathematical answer to the user's equation is: {answer}\n</math_calculation>\n\n"
+            except Exception as e:
+                print(f"[SERVER LOG] MATH failed: {e}")
+
+    What it implies: If MATH is chosen, Regex deletes the letters. eval() does the math. We enrich the answer into a
+                     full sentence, wrap it in XML, and staple it to the clipboard.
+
