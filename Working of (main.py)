@@ -393,3 +393,50 @@ Part 7: The Master Story (The Corporate Headquarters)
     A copy of this final letter is filed in Alex's Records Room so the company remembers the conversation, and
     the final response is shipped out the front door back to Alex's computer. The entire building executes this massive
     operation flawlessly in about 1.5 seconds.
+
+Part 8: Classic LLM Quirks Conquered
+
+    Throughout this journey, you encountered the fundamental psychological flaws of Large Language Models.
+    Here is exactly how we engineered around them:
+
+    1. Stateless Amnesia
+
+        The Quirk: The Groq supercomputer destroys its memory of you the millisecond it finishes generating a word.
+                   It has no concept of a "conversation."
+
+        The Fix: State Injection. We built the active_sessions dictionary to manually carry the memory on our server,
+                 physically re-uploading the entire conversation history with every single API call.
+
+    2. Prompt Bleed
+
+        The Quirk: When you give an AI a strict secret rule (e.g., "Output JSON only"), it gets confused and "bleeds"
+                  those secret instructions into the user-facing text, saying things like "Here is the data you requested per my system instructions..."
+
+        The Fix: Role Overrides & XML Fences. We explicitly commanded the AI "DO NOT talk to the user," and
+                 we used <xml> tags to build unbreakable walls between backend code and frontend conversation.
+
+    3. Attention Degradation (The "Lazy AI")
+
+        The Quirk: When handed a massive wall of text containing 2,000 words of news and one tiny math calculation,
+                   the AI's "attention mechanism" gets diluted. It focuses on the big text and literally forgets to write down the math answer.
+
+        The Fix: Context Enrichment & Checklist Forcing. We turned the naked number 10 into a full,
+                loud sentence ("The exact mathematical answer is: 10"). Then, we added a literal Checklist to the prompt
+                ("Did you state the math result?"), forcing the AI to verify its own work before speaking.
+
+    4. Prompt Injection (Micro-Agent Confusion)
+
+        The Quirk: When a user asks "What did Alex say?", the Micro-Agent panics, thinks the user is the developer,
+                   and spits out its own secret system instructions. It also gets confused if you tell it to "ignore math."
+
+        The Fix: Few-Shot Prompting. We updated the System Prompt to include exact User -> Output examples.
+                 By showing the AI exactly what a good output looks like, it locked into a pattern-matching state and stopped trying to hold conversations or get distracted by math.
+
+    5. Time Blindness
+
+        The Quirk: The LLM's brain is frozen on the day its training finished. It doesn't know what "current" or "today" means,
+                   which caused our web scraper to search for garbage.
+
+        The Fix: Dynamic Temporal Injection. We used Python's datetime library to physically inject today's exact
+                 date and year into the System Prompt right before the API call, effectively giving the AI a wristwatch
+                 so it could append "2026" to its search queries autonomously.
