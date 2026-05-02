@@ -212,3 +212,18 @@ Part 6: The Master Pipeline (The API Endpoint)
             labeled '/chat'. If a heavy package (POST) arrives at this mailbox, immediately hand it to the
             Python function sitting right below this sign."
 
+        2. The request Variable (The Cardboard Box)
+
+            Directly below that sign, we wrote this function:
+            async def chat_with_swarm(request: UserRequest):
+
+            When the user sends data from the internet (like from an iPhone app or Swagger UI),
+            FastAPI automatically puts all their data into a cardboard box.
+
+            request is just the name we gave to that cardboard box. It is not a magic Python word.
+            We could have named it incoming_box or user_data or pizza_delivery. We just use request because
+             it is standard engineering vocabulary for an "HTTP Request".
+
+            : UserRequest is our strict Pydantic security guard. It looks at the box and says:
+             "I will only let this box inside if it contains exactly two items: a user_id and a prompt."
+
