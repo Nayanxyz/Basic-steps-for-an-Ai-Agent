@@ -60,3 +60,26 @@ Part 2: Powering Up the Core
     Output/Example: active_sessions outputs an empty dictionary: {}. Later, it will look like
                     {"Alex": [chat history], "Sarah": [chat history]}.
 
+Part 3: The Local Database
+
+    Python
+
+        client = chromadb.Client()
+        collection = client.get_or_create_collection(name="chroma_collection")
+
+    What it implies: We start the database engine and open a digital folder to store company secrets.
+
+    Who connects to whom: Python connects to the local ChromaDB system.
+
+    Python
+
+        try:
+            collection.add(documents=["The company wifi password is 'BlueMonkey42'."], ids=["doc1"])
+        except:
+            pass
+
+    What it implies: We try to inject the wifi password into the folder. If the password is already there
+                     (which causes a crash error), the try/except block catches the error and uses pass to ignore it.
+
+    Output/Example: The database now secretly holds the wifi password, mapped to the ID "doc1".
+
