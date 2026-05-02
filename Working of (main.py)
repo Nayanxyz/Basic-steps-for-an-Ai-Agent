@@ -360,3 +360,36 @@ Part 6: The Master Pipeline (The API Endpoint)
     What it implies: If you run this file directly in the terminal, it turns on the electrical grid, plugs the server into
                      port 8000, and keeps it running forever.
 
+Part 7: The Master Story (The Corporate Headquarters)
+
+    Imagine your computer is a massive, highly secure Corporate Headquarters.
+
+    Outside the building, a customer named Alex hands a sealed envelope to Pydantic, the strict security guard at
+    the front desk. Pydantic checks the envelope: "It has a User ID and a Prompt. You may enter."
+
+    The envelope is carried to the Records Room (active_sessions). A clerk pulls Alex’s specific manila folder.
+    If Alex has been talking for hours and the folder is overflowing, the Night Janitor (compress_memory) takes
+    the old pages, writes a quick Summary Sheet, and replaces the clutter with the short summary.
+
+    Alex's new question is photocopied and handed to the Manager. The Manager sits in a completely silent room
+    (temperature=0.0). They don't talk; they just read the question and slam a red rubber stamp on the paper: "WEB, MATH".
+
+    Now, a runner takes a blank clipboard (collected_context) and sprints down the Pipeline Hallway.
+
+    They run past the RAG Room because the Manager didn't stamp it.
+
+    They burst into the WEB Room. The worker inside (the Micro-Agent) looks at a clock on the wall, reads the messy question,
+    ignores the math, and circles just the news topic. They hand that topic to the Research Assistant (DuckDuckGo),
+    who grabs 3 live newspaper clippings, puts them in an envelope labeled <live_web_data>, and clips it to the clipboard.
+
+    They burst into the MATH Room. The worker (re.sub) erases all the English words, types the raw numbers into a calculator,
+    writes the answer in an envelope labeled <math_calculation>, and clips it to the clipboard.
+
+    The runner hands this massive, data-filled clipboard to the Senior Synthesis Spokesperson (The Final AI). T
+    he Spokesperson looks at the strict checklist on the wall: "Check every envelope. Don't be lazy."
+    They open the XML envelopes, read the news, read the math, and type a beautifully polite, cohesive English response
+    that seamlessly answers Alex's chaotic question.
+
+    A copy of this final letter is filed in Alex's Records Room so the company remembers the conversation, and
+    the final response is shipped out the front door back to Alex's computer. The entire building executes this massive
+    operation flawlessly in about 1.5 seconds.
