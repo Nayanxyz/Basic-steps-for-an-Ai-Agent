@@ -227,3 +227,24 @@ Part 6: The Master Pipeline (The API Endpoint)
             : UserRequest is our strict Pydantic security guard. It looks at the box and says:
              "I will only let this box inside if it contains exactly two items: a user_id and a prompt."
 
+        3. The Dot Notation: request.user_id (Opening the Box)
+
+            Now the box is sitting on your desk inside the Python function. The box is named request.
+            How do we open the box and pull out the specific items inside? We use Dot Notation (.).
+
+            In Python, a dot . means "look inside."
+
+            request.user_id means: "Look inside the box named request, and pull out the string labeled user_id."
+
+            request.prompt means: "Look inside the box named request, and pull out the string labeled prompt."
+
+            If the user sent the JSON payload:
+            {"user_id": "Alex", "prompt": "Hello AI!"}
+
+            Then in our Python code:
+
+            request.user_id literally transforms into "Alex"
+
+            request.prompt literally transforms into "Hello AI!"
+    -----------------------------------------------------------------------------------------------------------------------------
+
