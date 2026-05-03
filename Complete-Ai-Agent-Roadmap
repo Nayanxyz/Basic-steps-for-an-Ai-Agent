@@ -1,0 +1,17 @@
+Phase 1: The Foundational Loop
+
+    Definition: A continuous execution cycle built in the terminal.
+
+    Usage: Creating a command-line interface that constantly listens for text input.
+
+    Purpose: By default, Python reads a file from top to bottom and shuts down. The loop prevents the script from terminating,
+             keeping the application awake to receive consecutive questions.
+
+    Key Elements: The while True: statement, which traps the execution in an infinite listening state.
+
+    Key Errors & Corrections:
+
+    * Error: The script runs once and closes immediately.
+
+    Correction: Place the user input function directly inside the while block so the program pauses and waits for the user on every cycle.
+
