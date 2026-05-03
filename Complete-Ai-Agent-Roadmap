@@ -166,3 +166,34 @@ Phase 10: Multi-Routing Pipeline & Micro-Agents
     Correction: Create an empty string first. Walk down every requested hallway, stacking the data onto the string using +=.
                 Once all data is collected, make one final API call to synthesize the answer.
 
+The Grand Master Pipeline (Final Architecture Flow)
+
+    When a user submits a complex question into the enterprise application, the entire system executes in this precise sequence:
+
+    User Input & State Management (Phase 7): The user types a message into the Streamlit UI. The system saves this safely in st.session_state.
+
+    Memory Maintenance (Phase 8): The application checks the length of the chat. If it is too long, the Background Janitor
+                                  compresses the middle of the conversation into a Fact Sheet, keeping the memory fast and lightweight.
+
+    The Shadow Clone (Phase 7): The system creates a temporary, disconnected copy of the memory (temp_memory) so that messy
+                                backend data is never rendered on the user's screen.
+
+    The Orchestrator (Phase 9): The user's input is sent to the zero-temperature Manager AI. The Manager evaluates
+                                the intent and outputs specific routing tags (e.g., WEB, MATH, RAG).
+
+    The Pipeline Execution (Phase 10): A blank variable called collected_context is created. Python reads
+                                       the Manager's tags and opens the corresponding "hallways":
+
+    RAG Hallway (Phase 5): The system searches the local Vector Database for internal knowledge and appends it to the context variable.
+
+    WEB Hallway (Phase 6 & 10): A dedicated Micro-Agent extracts the exact search topic. Python forges a web browser header,
+                                scrapes Wikipedia, and appends the live text to the context variable.
+
+    MATH Hallway (Phase 10): A Regular Expression bouncer purifies the string of all English words, Python securely calculates the math,
+                             and appends the answer to the context variable.
+
+    The Final Synthesis (Phase 3 & 10): The massive block of collected_context is injected into the Shadow Clone's memory.
+                                        The API Bridge sends this single, heavily enriched payload to the Cloud.
+
+    The Output (Phase 1 & 7): The Final Worker AI reads all the collected data, formats a single, natural English response,
+                              and Streamlit prints it beautifully on the screen. The script then waits for the next user input, beginning the loop again.
