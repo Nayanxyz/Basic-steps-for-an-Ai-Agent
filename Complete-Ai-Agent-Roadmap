@@ -48,3 +48,19 @@ Phase 3: The Cloud Bridge (API Connection)
 
     Correction: Never hardcode API keys into the script. Use the dotenv library to load keys safely from a hidden file.
 
+Phase 4: The Tool Enforcer (JSON & Regex)
+
+    Definition: An architectural pattern that forces the AI to output machine-readable commands instead of conversational English.
+
+    Usage: Intercepting the AI's text to trigger specific Python functions automatically.
+
+    Purpose: To give the AI "hands." It allows the AI to interact with external tools rather than just acting as a chatbot.
+
+    Key Elements: Strict system prompts, Regular Expressions (re.search with re.DOTALL).
+
+    Key Errors & Corrections:
+
+    * Error: The AI wraps its JSON command in conversational text (e.g., "Here is your JSON: {...}").
+
+     Correction: Use Regular Expressions to surgically extract only the characters located between the curly brackets, ignoring the AI's extra talking.
+
