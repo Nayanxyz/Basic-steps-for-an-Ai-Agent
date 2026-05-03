@@ -64,3 +64,19 @@ Phase 4: The Tool Enforcer (JSON & Regex)
 
      Correction: Use Regular Expressions to surgically extract only the characters located between the curly brackets, ignoring the AI's extra talking.
 
+Phase 5: The Enterprise Brain (RAG Database)
+
+    Definition: A local vector database containing private company documents.
+
+    Usage: Searching for internal data based on the "meaning" of a user's question rather than exact keyword matches.
+
+    Purpose: To inject secure, proprietary knowledge into the AI's brain safely, allowing it to answer questions about private company policies.
+
+    Key Elements: ChromaDB, mathematical vector embeddings, Cosine Similarity calculations.
+
+    Key Errors & Corrections:
+
+    * Error: The AI hallucinates false company information.
+
+    Correction: Retrieve the raw text from the database and use a strict prompt to force the AI to answer only using the provided text.
+
