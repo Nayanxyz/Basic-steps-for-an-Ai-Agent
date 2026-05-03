@@ -112,3 +112,21 @@ Phase 7: The UI & Shadow Memory
 
     Correction: Store the memory list inside st.session_state to protect it from being erased during interface refreshes.
 
+Phase 8: The Background Janitor (Memory Splice)
+
+    Definition: An autonomous background process that compresses old conversation data.
+
+    Usage: Summarizing the middle of a long conversation into a concise "Fact Sheet" when the history grows too large.
+
+    Purpose: To prevent the application from crashing due to LLM context window limits while retaining critical facts and rules.
+
+    Key Elements: Python list slicing ([:-1]), background API calls.
+
+    Key Errors & Corrections:
+
+    * Error: The system summarizes the rules and forgets its persona, or it summarizes
+             the newest question and has nothing to reply to.
+
+    Correction: Perform a precise "Memory Splice." Extract Index 0 (Rules) and Index -1 (Newest Question),
+                place the Summary in the middle, and glue them back together.
+
