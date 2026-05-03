@@ -96,3 +96,19 @@ Phase 6: The Internet Explorer (Web Scraper)
 
     Correction: Forge the HTTP headers to mimic a standard human web browser (like Google Chrome), granting the script access to the site.
 
+Phase 7: The UI & Shadow Memory
+
+    Definition: Upgrading the application from a terminal script to a graphical web interface.
+
+    Usage: Rendering chat bubbles and hiding complex backend instructions from the user's view.
+
+    Purpose: To create a professional, user-friendly experience while maintaining strict control over the AI's hidden context.
+
+    Key Elements: The Streamlit framework, st.session_state, shallow list copying (temp_memory = chat_history.copy()).
+
+    Key Errors & Corrections:
+
+    * Error: Chat history disappears every time the user clicks a button because Streamlit restarts the file top-to-bottom.
+
+    Correction: Store the memory list inside st.session_state to protect it from being erased during interface refreshes.
+
