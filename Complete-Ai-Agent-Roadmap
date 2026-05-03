@@ -148,3 +148,21 @@ Phase 9: The Multi-Agent Swarm (The Switchboard)
     Correction: Implement "Few-Shot Prompting" by providing exact examples in the system prompt, and set
                 the temperature to 0.0 to force purely logical routing.
 
+Phase 10: Multi-Routing Pipeline & Micro-Agents
+
+    Definition: An advanced execution flow capable of running multiple tools simultaneously for a single prompt.
+
+    Usage: Handling complex, multi-part questions (e.g., "What is the weather AND what is 5+5?").
+
+    Purpose: To create a robust, real-world application. The pipeline gathers all necessary data across multiple
+             departments before making a single final request to a Synthesis AI.
+
+    Key Elements: The += operator, the collected_context string variable, Micro-Agent pre-processors (tiny AIs used to extract specific nouns).
+
+    Key Errors & Corrections:
+
+    * Error: The AI makes expensive API calls inside every hallway, overwriting its memory each time and driving up server costs.
+
+    Correction: Create an empty string first. Walk down every requested hallway, stacking the data onto the string using +=.
+                Once all data is collected, make one final API call to synthesize the answer.
+
