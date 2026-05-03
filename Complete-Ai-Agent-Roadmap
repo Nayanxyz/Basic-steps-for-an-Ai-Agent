@@ -15,3 +15,20 @@ Phase 1: The Foundational Loop
 
     Correction: Place the user input function directly inside the while block so the program pauses and waits for the user on every cycle.
 
+Phase 2: The Memory Bank (Stateless Context)
+
+    Definition: A running list of dictionaries tracking the conversation.
+
+    Usage: Appending every user question and AI answer to a single chat_history variable.
+
+    Purpose: Large Language Models (LLMs) are "stateless"—they have zero memory of previous interactions.
+             The system must send the entire conversation history with every single request so the AI understands the context.
+
+    Key Elements: Python lists, dictionary formatting ({"role": "user", "content": text}).
+
+    Key Errors & Corrections:
+
+    * Error: The AI forgets the user's name immediately after being told.
+
+    Correction: Ensure the application appends the AI's response to the list, not just the user's prompt, before sending the next payload.
+
