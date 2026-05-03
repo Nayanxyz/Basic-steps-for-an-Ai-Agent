@@ -130,3 +130,21 @@ Phase 8: The Background Janitor (Memory Splice)
     Correction: Perform a precise "Memory Splice." Extract Index 0 (Rules) and Index -1 (Newest Question),
                 place the Summary in the middle, and glue them back together.
 
+Phase 9: The Multi-Agent Swarm (The Switchboard)
+
+    Definition: A multi-agent architecture where a "Manager" AI delegates tasks to specific "Worker" AIs.
+
+    Usage: Routing user requests to distinct Python functions (RAG, WEB, CHAT) based on intent.
+
+    Purpose: To eliminate the need for fragile Regex interceptors (Phase 4). By giving the AIs singular,
+             focused jobs, the architecture drastically reduces confusion and "Prompt Bleed."
+
+    Key Elements: A Zero-Temperature Manager prompt, Python if / elif / else control flow.
+
+    Key Errors & Corrections:
+
+    * Error: The Manager panics due to safety filters or guesses wildly.
+
+    Correction: Implement "Few-Shot Prompting" by providing exact examples in the system prompt, and set
+                the temperature to 0.0 to force purely logical routing.
+
