@@ -32,3 +32,19 @@ Phase 2: The Memory Bank (Stateless Context)
 
     Correction: Ensure the application appends the AI's response to the list, not just the user's prompt, before sending the next payload.
 
+Phase 3: The Cloud Bridge (API Connection)
+
+    Definition: A network communication protocol linking the local Python script to a remote cloud server.
+
+    Usage: Sending the formatted memory list across the internet to generate a response.
+
+    Purpose: To utilize powerful, massive neural networks (like Llama 3 on Groq) without requiring expensive local supercomputers.
+
+    Key Elements: The requests.post function, HTTP headers, JSON payloads, and environment variables (.env).
+
+    Key Errors & Corrections:
+
+    * Error: Unauthorized access or leaked credentials.
+
+    Correction: Never hardcode API keys into the script. Use the dotenv library to load keys safely from a hidden file.
+
